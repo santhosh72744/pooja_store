@@ -8,38 +8,39 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
-import { UploadModule } from './upload/upload.module'; 
+import { UploadModule } from './upload/upload.module';
 import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
-    // Global env config
-    ConfigModule.forRoot({ isGlobal: true }),
+    // Global env config (.env at backend root)
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
 
     // Serve static files (for product images)
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'public'),
       serveRoot: '/', // files under public are available at http://localhost:4000/<path>
-    }), // [web:1287]
+    }),
 
-    // PostgreSQL + TypeORM
+    // PostgreSQL + TypeORM using env variables
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'puja',
-      password: 'puja123',
-      database: 'pooja_ecommerce',
+      host: process.env.DB_HOST || 'localhost',
+      port: Number(process.env.DB_PORT) || 5432,
+      username: process.env.DB_USERNAME || 'puja',
+      password: process.env.DB_PASSWORD || 'puja123',
+      database: process.env.DB_NAME || 'pooja_ecommerce',
       entities: [__dirname + '/**/*.entity.{ts,js}'],
       synchronize: true,
-    }), // [web:1034]
+    }),
 
     // Feature modules
     ProductsModule,
     CategoriesModule,
-    UploadModule, 
-     CartModule,
-     
+    UploadModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
