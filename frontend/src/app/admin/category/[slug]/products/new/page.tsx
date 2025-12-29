@@ -95,12 +95,13 @@ export default function NewProductPage() {
         }
 
         const uploadRes = await fetch(
-          'http://localhost:3000/upload/product-images',
+          `${process.env.NEXT_PUBLIC_API_URL}/upload/product-images`,
           {
             method: 'POST',
             body: formData,
           },
         );
+
 
         if (!uploadRes.ok) {
           throw new Error('Image upload failed');
@@ -112,8 +113,9 @@ export default function NewProductPage() {
       }
 
       // 2) create product row
-      const createRes = await fetch('http://localhost:3000/products', {
+      const createRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
         method: 'POST',
+
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           slug,

@@ -19,9 +19,10 @@ type Product = {
 async function getProducts(q: string): Promise<Product[]> {
   if (!q) return [];
   const res = await fetch(
-    `http://localhost:3000/products?q=${encodeURIComponent(q)}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/products?q=${encodeURIComponent(q)}`,
     { cache: 'no-store' },
   );
+
   if (!res.ok) throw new Error('Failed to fetch products');
   return res.json();
 }
@@ -61,7 +62,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   <div className="relative w-full pt-[75%]">
     {p.thumbnail && (
       <img
-        src={`http://localhost:3000${p.thumbnail}`}
+        src={`${process.env.NEXT_PUBLIC_API_URL}${p.thumbnail}`}
         alt={p.name}
         className="absolute inset-0 h-full w-full object-contain bg-white p-3"
       />

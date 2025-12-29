@@ -48,9 +48,10 @@ export default function ProductPage(props: PageProps) {
     async function load() {
     
       const res = await fetch(
-        `http://localhost:3000/products/${encodeURIComponent(slug)}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/products/${encodeURIComponent(slug)}`,
         { cache: 'no-store' },
       );
+
       if (!res.ok) {
         setProduct(null);
         return;
@@ -58,9 +59,10 @@ export default function ProductPage(props: PageProps) {
       const data: Product = await res.json();
       setProduct(data);
 
-      const thumb = data.thumbnail ? `http://localhost:3000${data.thumbnail}` : null;
-      const extras = data.images?.map((img) => `http://localhost:3000${img}`) ?? [];
+      const thumb = data.thumbnail ? `${process.env.NEXT_PUBLIC_API_URL}${data.thumbnail}` : null;
+      const extras = data.images?.map((img) => `${process.env.NEXT_PUBLIC_API_URL}${img}`) ?? [];
       const all = [...(thumb ? [thumb] : []), ...extras.filter((url) => url !== thumb)];
+
 
       setActiveImage(all[0] ?? null);
       setActiveIndex(0);
@@ -78,8 +80,9 @@ export default function ProductPage(props: PageProps) {
 
   const currencySymbol = product.currency === 'USD' ? '$' : '₹';
 
-  const thumbnailUrl = product.thumbnail ? `http://localhost:3000${product.thumbnail}` : null;
-  const galleryUrls = product.images?.map((img) => `http://localhost:3000${img}`) ?? [];
+  const thumbnailUrl = product.thumbnail ? `${process.env.NEXT_PUBLIC_API_URL}${product.thumbnail}` : null;
+  const galleryUrls = product.images?.map((img) => `${process.env.NEXT_PUBLIC_API_URL}${img}`) ?? [];
+
 
   const bottomImages = [
     ...(thumbnailUrl ? [thumbnailUrl] : []),

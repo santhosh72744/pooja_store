@@ -13,10 +13,7 @@ export default function Navbar() {
   }
 
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const initialQ = searchParams.get('q') ?? '';
-  const [search, setSearch] = useState(initialQ);
-
+  const [search, setSearch] = useState('');  // ← No useSearchParams!
   const { totalQuantity } = useCart();
 
   const handleSubmit = (e: React.FormEvent) => {

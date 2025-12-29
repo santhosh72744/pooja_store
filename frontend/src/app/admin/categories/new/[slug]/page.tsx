@@ -17,7 +17,7 @@ type Product = {
 };
 
 async function getCategory(slug: string): Promise<Category | null> {
-  const res = await fetch(`http://localhost:3000/categories/${slug}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/${slug}`, {
     cache: 'no-store',
   });
   if (!res.ok) return null;
@@ -26,12 +26,13 @@ async function getCategory(slug: string): Promise<Category | null> {
 
 async function getProducts(slug: string): Promise<Product[]> {
   const res = await fetch(
-    `http://localhost:3000/products?category=${encodeURIComponent(slug)}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/products?category=${encodeURIComponent(slug)}`,
     { cache: 'no-store' },
   );
   if (!res.ok) return [];
   return res.json();
 }
+
 
 export default async function AdminCategoryPage({
   params,

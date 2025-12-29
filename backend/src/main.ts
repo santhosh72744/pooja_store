@@ -1,4 +1,3 @@
-// backend/src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -7,16 +6,19 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  // ✅ FIXED CORS - Complete config
   app.enableCors({
-    origin: 'http://localhost:3001',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
   });
 
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads',
+  // ✅ FIXED Static assets - Production ready
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
+    prefix: '/uploads/',
   });
 
-  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3001;
   await app.listen(port);
   console.log(`Nest app listening on port ${port}`);
 }

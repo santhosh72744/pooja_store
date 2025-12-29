@@ -15,16 +15,18 @@ export default function CartPage() {
   }
 
   const handleIncrease = async (itemId: string) => {
-    await fetch(`http://localhost:3000/cart/items/${itemId}/increase`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${itemId}/increase`, {
       method: 'PATCH',
     });
+
     await reload();
   };
 
   const handleDecrease = async (itemId: string) => {
-    await fetch(`http://localhost:3000/cart/items/${itemId}/decrease`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${itemId}/decrease`, {
       method: 'PATCH',
     });
+
     await reload();
   };
 
@@ -41,7 +43,7 @@ export default function CartPage() {
             {cart.items.map((item: any) => {
               const product = item.product;
               const thumbUrl = product?.thumbnail
-                ? `http://localhost:3000${product.thumbnail}`
+                ? `${process.env.NEXT_PUBLIC_API_URL}${product.thumbnail}`
                 : null;
 
               return (

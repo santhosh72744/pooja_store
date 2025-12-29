@@ -21,7 +21,7 @@ import { CartModule } from './cart/cart.module';
  
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'public'),
-      serveRoot: '/', // files under public are available at http://localhost:4000/<path>
+      serveRoot: '/', 
     }),
 
  
@@ -32,9 +32,10 @@ import { CartModule } from './cart/cart.module';
       username: process.env.DB_USERNAME || 'puja',
       password: process.env.DB_PASSWORD || 'puja123',
       database: process.env.DB_NAME || 'pooja_ecommerce',
-      entities: [__dirname + '/**/*.entity.{ts,js}'],
+      entities: [join(process.cwd(), 'dist', '**', '*.entity.js')],  // ← FIXED!
       synchronize: true,
     }),
+
 
     // Feature modules
     ProductsModule,

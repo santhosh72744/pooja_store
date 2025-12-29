@@ -15,9 +15,10 @@ type Product = {
 
 async function getProductsByCategory(id: string): Promise<Product[]> {
   const res = await fetch(
-    `http://localhost:3000/products?category=${encodeURIComponent(id)}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/products?category=${encodeURIComponent(id)}`,
     { cache: 'no-store' },
   );
+
   if (!res.ok) throw new Error('Failed to fetch products');
   return res.json();
 }
@@ -65,7 +66,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   <div className="relative h-56 w-full bg-slate-100">
                     {p.thumbnail && (
                       <Image
-                        src={`http://localhost:3000${p.thumbnail}`}
+                        src={`${process.env.NEXT_PUBLIC_API_URL}${p.thumbnail}`}
                         alt={p.name}
                         fill
                         className="object-contain bg-white"

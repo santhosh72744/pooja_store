@@ -12,9 +12,10 @@ export function CategoryActions({ id }: { id: string }) {
     if (!confirm('Delete this category? This cannot be undone.')) return;
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:3000/categories/${id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories/${id}`, {
         method: 'DELETE',
       });
+
       if (!res.ok) throw new Error('Failed to delete');
       router.push('/admin');
       router.refresh();
