@@ -33,7 +33,7 @@ export default function EditProductPage() {
   const params = useParams<{ slug: string }>();
   const slugParam = params.slug;
 
-  // same state as add-product page
+
   const [slug, setSlug] = useState('');
   const [name, setName] = useState('');
   const [shortDescription, setShortDescription] = useState('');
@@ -59,7 +59,7 @@ export default function EditProductPage() {
   const [loading, setLoading] = useState(true);
   const [productId, setProductId] = useState<string | null>(null);
 
-  // load product data
+  
   useEffect(() => {
     async function load() {
       const res = await fetch(
@@ -93,7 +93,6 @@ export default function EditProductPage() {
     load();
   }, [slugParam]);
 
-  // helper to turn "/uploads/..." into full URL
   function resolveImageUrl(path?: string | null) {
     if (!path) return '';
     if (path.startsWith('http://') || path.startsWith('https://')) {
@@ -113,7 +112,7 @@ export default function EditProductPage() {
     setSubmitting(true);
 
     try {
-      // upload new images if any
+     
       let thumbnailPath: string | undefined = existingThumbnail || undefined;
       let imagesPaths: string[] | undefined = existingImages;
 
@@ -139,7 +138,7 @@ export default function EditProductPage() {
         }
       }
 
-      // PATCH product by id
+      
      const updateRes = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`,
         {
@@ -196,7 +195,7 @@ export default function EditProductPage() {
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic info */}
+   
         <div className="space-y-2">
           <label className="block text-xs font-medium text-slate-700">
             Slug
@@ -244,7 +243,7 @@ export default function EditProductPage() {
           />
         </div>
 
-        {/* Pricing */}
+        
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="block text-xs font-medium text-slate-700">
@@ -272,7 +271,7 @@ export default function EditProductPage() {
           </div>
         </div>
 
-        {/* Stock and category */}
+       
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="block text-xs font-medium text-slate-700">
@@ -298,7 +297,7 @@ export default function EditProductPage() {
           </div>
         </div>
 
-        {/* Dimensions */}
+       
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-2">
             <label className="block text-xs font-medium text-slate-700">
@@ -335,7 +334,7 @@ export default function EditProductPage() {
           </div>
         </div>
 
-        {/* Material / finish / items */}
+       
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-2">
             <label className="block text-xs font-medium text-slate-700">
@@ -372,7 +371,7 @@ export default function EditProductPage() {
           </div>
         </div>
 
-        {/* Thumbnail with preview + replace/delete */}
+       
         <div className="space-y-2">
           <label className="block text-xs font-medium text-slate-700">
             Thumbnail
@@ -423,7 +422,7 @@ export default function EditProductPage() {
           />
         </div>
 
-        {/* Gallery images with delete + add */}
+      
         <div className="space-y-2">
           <label className="block text-xs font-medium text-slate-700">
             Gallery images

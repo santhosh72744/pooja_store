@@ -1,4 +1,4 @@
-// app/search/page.tsx
+
 
 type SearchPageProps = {
   searchParams: Promise<{ q?: string }>;
@@ -56,8 +56,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 className="block"
               >
                 <article className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
-                  {/* image – same as category card */}
-                  {/* image – fit thumbnail without cutting */}
+                 
 <div className="relative w-full overflow-hidden bg-slate-100 rounded-t-3xl">
   <div className="relative w-full pt-[75%]">
     {p.thumbnail && (

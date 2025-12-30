@@ -1,4 +1,4 @@
-// src/upload/upload.controller.ts
+
 import {
   Controller,
   Post,
@@ -28,7 +28,7 @@ export class UploadController {
   @UseInterceptors(
     AnyFilesInterceptor({
       storage: diskStorage({
-        destination: uploadDir, // use existing folder
+        destination: uploadDir, 
         filename: filenameGenerator,
       }),
     }),

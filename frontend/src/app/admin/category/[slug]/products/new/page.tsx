@@ -21,7 +21,7 @@ export default function NewProductPage() {
   const [currency, setCurrency] = useState('USD');
   const [stock, setStock] = useState('0');
 
-  // extra fields
+  
   const [diameterInches, setDiameterInches] = useState('');
   const [heightInches, setHeightInches] = useState('');
   const [weightLbs, setWeightLbs] = useState('');
@@ -29,7 +29,7 @@ export default function NewProductPage() {
   const [finishing, setFinishing] = useState('');
   const [includedItems, setIncludedItems] = useState('');
 
-  // files + previews
+  
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
 
@@ -81,7 +81,7 @@ export default function NewProductPage() {
     setSubmitting(true);
 
     try {
-      // 1) upload images (if any)
+    
       let thumbnailPath: string | undefined;
       let imagesPaths: string[] | undefined;
 
@@ -112,7 +112,7 @@ export default function NewProductPage() {
         if (data.images && data.images.length > 0) imagesPaths = data.images;
       }
 
-      // 2) create product row
+      
       const createRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
         method: 'POST',
 
@@ -174,7 +174,7 @@ export default function NewProductPage() {
           onSubmit={handleSubmit}
           className="space-y-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200/70"
         >
-          {/* basic info */}
+        
           <section className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <div>
@@ -227,7 +227,7 @@ export default function NewProductPage() {
             </div>
           </section>
 
-          {/* price + stock + currency */}
+          
           <section className="space-y-3 rounded-xl bg-slate-50/80 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
               Pricing & stock
@@ -276,7 +276,7 @@ export default function NewProductPage() {
             </div>
           </section>
 
-          {/* specs */}
+        
           <section className="space-y-3 rounded-xl bg-slate-50/80 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
               Specifications
@@ -357,13 +357,13 @@ export default function NewProductPage() {
             </div>
           </section>
 
-          {/* images */}
+      
           <section className="space-y-3 rounded-xl bg-slate-50/80 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
               Images
             </p>
             <div className="grid gap-8 md:grid-cols-2">
-              {/* Thumbnail */}
+          
               <div>
                 <label className="block text-xs font-medium text-slate-600">
                   Thumbnail image
@@ -417,7 +417,7 @@ export default function NewProductPage() {
                 </p>
               </div>
 
-              {/* Gallery */}
+              
               <div>
                 <label className="block text-xs font-medium text-slate-600">
                   Gallery images

@@ -1,4 +1,4 @@
-// src/app/admin/category/[slug]/page.tsx
+
 import Link from 'next/link';
 import { CategoryActions } from './CategoryActions';
 
@@ -130,7 +130,7 @@ export default async function AdminCategoryPage({ params }: PageProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        {/* Public product page */}
+       
         <Link
           href={`/product/${p.slug}`}
           className="rounded-full border border-slate-200 px-3 py-1 text-xs text-slate-700 hover:bg-slate-50"
@@ -138,7 +138,7 @@ export default async function AdminCategoryPage({ params }: PageProps) {
           View
         </Link>
 
-        {/* Admin edit page */}
+   
         <Link
           href={`/admin/product/${p.slug}/edit`}
           className="rounded-full border border-slate-200 px-3 py-1 text-xs text-slate-700 hover:bg-slate-50"

@@ -1,4 +1,4 @@
-// src/app/admin/category/[slug]/CategoryActions.tsx
+
 'use client';
 
 import { useRouter } from 'next/navigation';

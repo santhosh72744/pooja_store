@@ -1,4 +1,4 @@
-// src/app.module.ts
+
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -32,12 +32,12 @@ import { CartModule } from './cart/cart.module';
       username: process.env.DB_USERNAME || 'puja',
       password: process.env.DB_PASSWORD || 'puja123',
       database: process.env.DB_NAME || 'pooja_ecommerce',
-      entities: [join(process.cwd(), 'dist', '**', '*.entity.js')],  // ← FIXED!
+      entities: [join(process.cwd(), 'dist', '**', '*.entity.js')],  
       synchronize: true,
     }),
 
 
-    // Feature modules
+
     ProductsModule,
     CategoriesModule,
     UploadModule,

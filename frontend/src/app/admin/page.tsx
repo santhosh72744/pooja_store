@@ -1,4 +1,4 @@
-// src/app/admin/page.tsx
+
 import Link from 'next/link';
 
 type Category = {

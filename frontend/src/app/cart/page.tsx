@@ -38,7 +38,7 @@ export default function CartPage() {
         </h1>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)]">
-          {/* LEFT: items list */}
+          
           <section className="space-y-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
             {cart.items.map((item: any) => {
               const product = item.product;
@@ -51,7 +51,7 @@ export default function CartPage() {
                   key={item.id}
                   className="flex gap-4 border-b border-slate-100 pb-4 last:border-0 last:pb-0"
                 >
-                  {/* Image */}
+                  
                   <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md bg-slate-100">
                     {thumbUrl ? (
                       <Image
@@ -69,7 +69,7 @@ export default function CartPage() {
                     )}
                   </div>
 
-                  {/* Info */}
+                  
                   <div className="flex flex-1 flex-col gap-1 text-sm">
                     <p className="font-medium text-slate-900">
                       {product?.name || 'Product'}
@@ -100,7 +100,7 @@ export default function CartPage() {
                     </div>
                   </div>
 
-                  {/* Price */}
+                  
                   <div className="text-right text-sm">
                     <p className="font-semibold text-slate-900">
                       ₹{Number(item.unitPrice) * item.quantity}
@@ -114,7 +114,7 @@ export default function CartPage() {
             })}
           </section>
 
-          {/* RIGHT: order summary */}
+        
           <aside className="space-y-3 self-start rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
             <p className="text-sm text-slate-800">
               Subtotal ({totalQuantity} items):{' '}

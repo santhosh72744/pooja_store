@@ -1,4 +1,4 @@
-// src/app/category/[id]/page.tsx
+
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -36,7 +36,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <main className="min-h-screen bg-slate-50">
       <section className="mx-auto max-w-6xl px-4 py-10">
-        {/* Centered, nicer heading */}
+      
         <div className="mb-8 text-center">
           <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-amber-500">
             Browse category
@@ -62,7 +62,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 className="block"
               >
                 <article className="flex h-full flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md">
-                  {/* image */}
+                 
                   <div className="relative h-56 w-full bg-slate-100">
                     {p.thumbnail && (
                       <Image
@@ -75,7 +75,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     )}
                   </div>
 
-                  {/* content */}
+              
                   <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
                     <p className="inline-flex items-center self-start rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">
                       In stock

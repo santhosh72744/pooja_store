@@ -29,8 +29,8 @@ export default function NewCategoryPage() {
         throw new Error(data?.message ?? 'Failed to create category');
       }
 
-      router.push('/admin');        // back to list
-      router.refresh();             // reload categories
+      router.push('/admin');       
+      router.refresh();             
     } catch (err: any) {
       setError(err.message);
     } finally {

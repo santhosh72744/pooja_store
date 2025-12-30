@@ -1,4 +1,4 @@
-// src/app/admin/category/[slug]/page.tsx
+
 import Link from 'next/link';
 
 type Category = {
@@ -99,7 +99,7 @@ export default async function AdminCategoryPage({
                   ₹{p.price} · Stock: {p.stock}
                 </p>
               </div>
-              {/* edit button will come later */}
+             
             </li>
           ))}
         </ul>

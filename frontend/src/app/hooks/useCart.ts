@@ -1,4 +1,4 @@
-// frontend/src/hooks/useCart.ts
+
 
 'use client';
 
@@ -34,13 +34,13 @@ export function useCart() {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // init token on client
+  
   useEffect(() => {
     const token = getOrCreateCartToken();
     setCartToken(token);
   }, []);
 
-  // reusable loader so page can call reload()
+  
   const fetchCart = useCallback(
     async (overrideToken?: string) => {
       const token = overrideToken ?? cartToken;
@@ -60,7 +60,7 @@ export function useCart() {
     [cartToken],
   );
 
-  // load cart when token ready
+  
   useEffect(() => {
     if (!cartToken) return;
     fetchCart(cartToken);
@@ -104,6 +104,6 @@ export function useCart() {
     addItem,
     totalQuantity,
     totalPrice,
-    reload: fetchCart, // IMPORTANT: used by CartPage after PATCH
+    reload: fetchCart, 
   };
 }

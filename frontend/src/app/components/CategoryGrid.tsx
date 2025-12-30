@@ -1,4 +1,4 @@
-// src/app/components/CategoryGrid.tsx
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -45,7 +45,7 @@ export default function CategoryGrid() {
   }, []);
 
   if (loading && categories.length === 0) {
-    return null; // or a small skeleton loader if you want
+    return null;
   }
 
   return (

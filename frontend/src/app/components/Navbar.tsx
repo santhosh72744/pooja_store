@@ -7,13 +7,13 @@ import { useCart } from '../hooks/useCart';
 
 export default function Navbar() {
   const pathname = usePathname();
-  // render only on home page
+  
   if (pathname !== '/') {
     return null;
   }
 
   const router = useRouter();
-  const [search, setSearch] = useState('');  // ← No useSearchParams!
+  const [search, setSearch] = useState('');  
   const { totalQuantity } = useCart();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -29,7 +29,7 @@ export default function Navbar() {
 
       <nav className="backdrop-blur-xl bg-white/70 border-b border-white/40 shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 h-16 flex items-center gap-4">
-          {/* Logo + brand */}
+         
           <div className="flex items-center gap-2">
             <div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-orange-500 via-amber-400 to-pink-500 flex items-center justify-center shadow-md">
               <span className="text-xl">🪔</span>
@@ -44,7 +44,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Search bar */}
+         
           <form
             onSubmit={handleSubmit}
             className="hidden sm:flex flex-1 justify-center"
@@ -69,7 +69,7 @@ export default function Navbar() {
             </div>
           </form>
 
-          {/* Right side actions */}
+        
           <div className="ml-auto flex items-center gap-3 text-xs font-medium">
             <button className="hidden md:inline-flex items-center rounded-full px-3 py-1.5 text-slate-700 hover:bg-orange-50 hover:text-orange-700 transition">
               Orders

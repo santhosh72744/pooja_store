@@ -6,7 +6,7 @@ type ProductImagesProps = {
 };
 
 const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
-  // Fallback: if no images passed, avoid crashes
+  
   const safeImages =
     images && images.length > 0
       ? images
@@ -41,7 +41,7 @@ const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
           />
         </div>
 
-        {/* thumbnails row */}
+       
         <div className="flex gap-3 mt-3">
           {safeImages.map((img, index) => (
             <button
@@ -67,13 +67,13 @@ const ProductImages: React.FC<ProductImagesProps> = ({ images }) => {
     
       <div className="flex-1">
         {isHovering ? (
-          // zoom panel (shows only while hovering left image)
+         
           <div className="w-[350px] h-[350px] border rounded-xl overflow-hidden bg-gray-100">
             <div
               className="w-full h-full bg-no-repeat"
               style={{
                 backgroundImage: `url(${safeImages[activeIndex]})`,
-                backgroundSize: "200%", // zoom level
+                backgroundSize: "200%", 
                 backgroundPosition: `${cursorPos.x}% ${cursorPos.y}%`,
               }}
             />

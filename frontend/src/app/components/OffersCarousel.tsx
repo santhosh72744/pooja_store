@@ -47,7 +47,7 @@ export default function OffersCarousel() {
   return (
     <section className="w-full bg-slate-900">
       <div className="relative w-full overflow-hidden">
-        {/* Slides */}
+       
         {slides.map((slide, index) => (
           <div
             key={slide.id}
@@ -95,7 +95,7 @@ export default function OffersCarousel() {
           <div className="h-[260px] md:h-[320px] lg:h-[360px]" />
         </div>
 
-        {/* Dots */}
+        
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
           {slides.map((slide, index) => (
             <button

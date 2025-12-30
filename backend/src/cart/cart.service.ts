@@ -47,7 +47,7 @@ export class CartService {
     return this.getCartWithItems(cartToken);
   }
 
-  // For loading cart in frontend
+ 
   async getCart(cartToken: string) {
     await this.getOrCreateCart(cartToken);
     return this.getCartWithItems(cartToken);

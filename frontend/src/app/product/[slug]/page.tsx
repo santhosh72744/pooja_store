@@ -111,11 +111,11 @@ export default function ProductPage(props: PageProps) {
   return (
     <main className="min-h-screen bg-slate-50">
       <section className="mx-auto max-w-6xl px-4 py-10">
-        {/* TOP GRID: left images + right zoom / info */}
+      
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)]">
-          {/* LEFT: main image + thumbnails */}
+         
           <div className="space-y-4">
-            {/* MAIN IMAGE */}
+           
             <button
               type="button"
               className="relative h-[340px] w-full overflow-hidden rounded-3xl bg-slate-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-crosshair"
@@ -143,7 +143,7 @@ export default function ProductPage(props: PageProps) {
               />
             </button>
 
-            {/* THUMBNAILS */}
+         
             {bottomImages.length > 0 && (
               <div className="grid grid-cols-4 gap-3">
                 {bottomImages.map((fullUrl, index) => {
@@ -174,7 +174,7 @@ export default function ProductPage(props: PageProps) {
             )}
           </div>
 
-          {/* RIGHT: zoom panel + info */}
+          
           <div className="space-y-4">
             {isHoveringMain && (
               <div className="rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
@@ -248,7 +248,6 @@ export default function ProductPage(props: PageProps) {
           </div>
         </div>
 
-        {/* LOWER SECTIONS */}
         <div className="mt-10 grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1.1fr)]">
           <div className="space-y-6">
             <div className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200">

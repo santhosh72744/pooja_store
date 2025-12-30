@@ -2,7 +2,7 @@
 import { Suspense } from 'react';
 import OffersCarousel from './components/OffersCarousel';
 import CategoryGrid from './components/CategoryGrid';
-import Navbar from './components/Navbar';  // Add this
+import Navbar from './components/Navbar';  
 
 export default function HomePage() {
   return (

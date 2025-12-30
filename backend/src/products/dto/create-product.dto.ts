@@ -1,4 +1,4 @@
-// src/products/dto/create-product.dto.ts
+
 export class CreateProductDto {
   slug: string;
   name: string;

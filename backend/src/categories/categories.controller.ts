@@ -1,4 +1,4 @@
-// src/categories/categories.controller.ts
+
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { Category } from './category.entity';
