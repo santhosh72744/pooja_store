@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,38 +9,46 @@ import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 import { UploadModule } from './upload/upload.module';
 import { CartModule } from './cart/cart.module';
+import { UsersModule } from './users/users.module';
+import {AuthModule } from './auth/auth.module';
+import { PaymentsModule } from './payments/payments.module';
+import { OrdersModule } from './orders/orders.module';
+
 
 @Module({
   imports: [
-    
     ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+  isGlobal: true,
+  envFilePath: '.env',
+}),
 
- 
+
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'public'),
-      serveRoot: '/', 
+      serveRoot: '/',
     }),
 
- 
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST || 'localhost',
-      port: Number(process.env.DB_PORT) || 5432,
-      username: process.env.DB_USERNAME || 'puja',
-      password: process.env.DB_PASSWORD || 'puja123',
-      database: process.env.DB_NAME || 'pooja_ecommerce',
-      entities: [join(process.cwd(), 'dist', '**', '*.entity.js')],  
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      autoLoadEntities: true,
       synchronize: true,
     }),
-
-
 
     ProductsModule,
     CategoriesModule,
     UploadModule,
     CartModule,
+    UsersModule,
+    AuthModule,
+    
+    PaymentsModule,
+    OrdersModule,
+   
   ],
   controllers: [AppController],
   providers: [AppService],

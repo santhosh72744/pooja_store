@@ -1,4 +1,3 @@
-
 import {
   Controller,
   Get,
@@ -17,23 +16,29 @@ import { Product } from './product.entity';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  
   @Post()
   create(@Body() dto: CreateProductDto) {
     return this.productsService.create(dto);
   }
-
 
   @Get()
   findAll(@Query('category') category?: string) {
     return this.productsService.findAll(category);
   }
 
-
   @Get(':slug')
-  findOne(@Param('slug') slug: string) {
-    return this.productsService.findOneBySlug(slug);
-  }
+async findOne(@Param('slug') slug: string) {
+  const product = await this.productsService.findOneBySlug(slug);
+
+  return {
+    ...product,
+    breadcrumbs: [
+      { label: 'Home', url: '/' },
+      { label: product.category, url: `/category/${product.category}` },
+      { label: product.name, url: null },
+    ],
+  };
+}
 
 
   @Patch(':id')

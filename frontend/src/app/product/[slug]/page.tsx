@@ -1,9 +1,10 @@
-
 'use client';
 
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../../hooks/useCart';
+import Breadcrumb from '@/app/components/Breadcrumb';
+import { useRouter } from 'next/navigation';
 
 type Product = {
   id: string;
@@ -23,15 +24,14 @@ type Product = {
   finish?: string;
   includedItems?: string;
   stock?: number;
+  
 };
 
 type PageProps = {
-
   params: Promise<{ slug: string }>;
 };
 
 export default function ProductPage(props: PageProps) {
-
   const { slug } = (React as any).use(props.params) as { slug: string };
 
   const [product, setProduct] = useState<Product | null>(null);
@@ -41,17 +41,15 @@ export default function ProductPage(props: PageProps) {
   const [isZoomed, setIsZoomed] = useState(false);
   const [isHoveringMain, setIsHoveringMain] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: 50, y: 50 });
-
+  const router = useRouter();
   const { addItem, loading } = useCart();
 
   useEffect(() => {
     async function load() {
-    
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/products/${encodeURIComponent(slug)}`,
         { cache: 'no-store' },
       );
-
       if (!res.ok) {
         setProduct(null);
         return;
@@ -59,10 +57,17 @@ export default function ProductPage(props: PageProps) {
       const data: Product = await res.json();
       setProduct(data);
 
-      const thumb = data.thumbnail ? `${process.env.NEXT_PUBLIC_API_URL}${data.thumbnail}` : null;
-      const extras = data.images?.map((img) => `${process.env.NEXT_PUBLIC_API_URL}${img}`) ?? [];
-      const all = [...(thumb ? [thumb] : []), ...extras.filter((url) => url !== thumb)];
-
+      const thumb = data.thumbnail
+        ? `${process.env.NEXT_PUBLIC_API_URL}${data.thumbnail}`
+        : null;
+      const extras =
+        data.images?.map(
+          (img) => `${process.env.NEXT_PUBLIC_API_URL}${img}`,
+        ) ?? [];
+      const all = [
+        ...(thumb ? [thumb] : []),
+        ...extras.filter((url) => url !== thumb),
+      ];
 
       setActiveImage(all[0] ?? null);
       setActiveIndex(0);
@@ -70,350 +75,245 @@ export default function ProductPage(props: PageProps) {
     load();
   }, [slug]);
 
-  if (!product || !activeImage) {
+  if (!product || !activeImage)
     return (
-      <main className="mx-auto max-w-4xl px-4 py-16">
-        <p className="text-sm text-slate-600">Product not found.</p>
-      </main>
+      <div className="h-screen flex items-center justify-center font-light tracking-widest uppercase italic text-stone-400">
+        Restoring the sanctuary...
+      </div>
     );
-  }
+
+  const breadcrumbs = [
+    { label: 'Home', url: '/' },
+    { label: product.category, url: `/category/${product.category}` },
+    { label: product.name, url: null },
+  ];
 
   const currencySymbol = product.currency === 'USD' ? '$' : '₹';
 
-  const thumbnailUrl = product.thumbnail ? `${process.env.NEXT_PUBLIC_API_URL}${product.thumbnail}` : null;
-  const galleryUrls = product.images?.map((img) => `${process.env.NEXT_PUBLIC_API_URL}${img}`) ?? [];
-
-
   const bottomImages = [
-    ...(thumbnailUrl ? [thumbnailUrl] : []),
-    ...galleryUrls.filter((url) => url !== thumbnailUrl),
-  ];
+    ...(product.thumbnail
+      ? [`${process.env.NEXT_PUBLIC_API_URL}${product.thumbnail}`]
+      : []),
+    ...(product.images?.map(
+      (img) => `${process.env.NEXT_PUBLIC_API_URL}${img}`,
+    ) || []),
+  ].filter((v, i, a) => a.indexOf(v) === i);
 
-  const goPrev = () => {
-    if (bottomImages.length === 0) return;
-    const nextIndex = (activeIndex - 1 + bottomImages.length) % bottomImages.length;
-    setActiveIndex(nextIndex);
-    setActiveImage(bottomImages[nextIndex]);
-  };
+  const itemizedList = product.includedItems
+    ? product.includedItems
+        .split(/[,;]|\d+\s/)
+        .filter((item) => item.trim().length > 2)
+    : [];
 
-  const goNext = () => {
-    if (bottomImages.length === 0) return;
-    const nextIndex = (activeIndex + 1) % bottomImages.length;
-    setActiveIndex(nextIndex);
-    setActiveImage(bottomImages[nextIndex]);
-  };
+  const handleBuyNow = () => {
+  const token = localStorage.getItem('token');
 
-  const handleAddToCart = () => {
-    if (!product) return;
-    addItem(product.id, 1, product.price);
-  };
+  // Not logged in → go to login
+  if (!token) {
+    router.push(`/login?redirect=/checkout?product=${product?.id}`);
+    return;
+  }
+
+  // Logged in → go to checkout with product
+  router.push(`/checkout?product=${product?.id}`);
+};
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <section className="mx-auto max-w-6xl px-4 py-10">
-      
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.2fr)]">
-         
-          <div className="space-y-4">
-           
-            <button
-              type="button"
-              className="relative h-[340px] w-full overflow-hidden rounded-3xl bg-slate-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-crosshair"
-              onClick={() => {
-                const idx = bottomImages.findIndex((url) => url === activeImage);
-                if (idx >= 0) setActiveIndex(idx);
-                setIsOpen(true);
-                setIsZoomed(false);
-              }}
+    <main className="min-h-screen bg-[#FDFDFB] text-[#121212]">
+  <Breadcrumb items={breadcrumbs} />
+
+  <div className="mx-auto max-w-[1500px] px-8 pt-32 pb-24">
+
+        <div className="grid lg:grid-cols-[1fr_450px] gap-16">
+          {/* LEFT: GALLERY AREA */}
+          <div className="space-y-8">
+            <div
+              className="relative aspect-square w-full bg-white rounded-3xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-stone-100 group cursor-zoom-in"
               onMouseEnter={() => setIsHoveringMain(true)}
               onMouseLeave={() => setIsHoveringMain(false)}
               onMouseMove={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                setCursorPos({ x, y });
+                setCursorPos({
+                  x: ((e.clientX - rect.left) / rect.width) * 100,
+                  y: ((e.clientY - rect.top) / rect.height) * 100,
+                });
               }}
+              onClick={() => setIsOpen(true)}
             >
               <Image
                 src={activeImage}
                 alt={product.name}
                 fill
-                className="object-contain bg-white"
+                className="object-contain p-12 transition-transform duration-700 group-hover:scale-105"
                 unoptimized
               />
-            </button>
 
-         
-            {bottomImages.length > 0 && (
-              <div className="grid grid-cols-4 gap-3">
-                {bottomImages.map((fullUrl, index) => {
-                  const isActive = fullUrl === activeImage;
-                  return (
-                    <button
-                      key={fullUrl}
-                      type="button"
-                      onClick={() => {
-                        setActiveImage(fullUrl);
-                        setActiveIndex(index);
-                      }}
-                      className={`relative h-20 w-full overflow-hidden rounded-xl bg-slate-100 border ${
-                        isActive ? 'border-amber-500' : 'border-transparent'
-                      }`}
-                    >
-                      <Image
-                        src={fullUrl}
-                        alt={product.name}
-                        fill
-                        className="object-contain bg-white"
-                        unoptimized
-                      />
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          
-          <div className="space-y-4">
-            {isHoveringMain && (
-              <div className="rounded-3xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
-                <div className="w-full h-[380px] overflow-hidden rounded-2xl bg-slate-100 border">
+              {isHoveringMain && (
+                <div className="absolute inset-0 z-50 bg-white border-4 border-white pointer-events-none">
                   <div
                     className="w-full h-full bg-no-repeat"
                     style={{
                       backgroundImage: `url(${activeImage})`,
-                      backgroundSize: '200%',
+                      backgroundSize: '350%',
                       backgroundPosition: `${cursorPos.x}% ${cursorPos.y}%`,
                     }}
                   />
                 </div>
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Kits
-              </p>
-              <h1 className="text-2xl font-semibold leading-snug text-slate-900 md:text-3xl">
-                {product.name}
-              </h1>
-
-              {product.shortDescription && (
-                <p className="text-sm text-slate-600">{product.shortDescription}</p>
               )}
+            </div>
 
-              <div className="space-y-1">
-                <div className="flex items-baseline gap-3">
-                  <p className="text-2xl font-semibold text-amber-700">
-                    {currencySymbol}
-                    {product.price.toFixed(2)}
-                  </p>
-                </div>
-                {typeof product.stock === 'number' && (
-                  <p className="text-xs text-emerald-700">
-                    In stock · Only {product.stock} left
-                  </p>
-                )}
+            {/* THUMBNAILS */}
+            <div className="flex gap-4">
+              {bottomImages.map((url, i) => (
+                <button
+                  key={url}
+                  onClick={() => {
+                    setActiveImage(url);
+                    setActiveIndex(i);
+                  }}
+                  className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all ${
+                    activeIndex === i
+                      ? 'border-amber-500 scale-105 shadow-md'
+                      : 'border-transparent opacity-40'
+                  }`}
+                >
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT: DETAILS AREA */}
+          <div className="flex flex-col">
+            <div className="sticky top-32 space-y-10">
+              <div className="space-y-4">
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-700">
+                  {product.category}
+                </span>
+                <h1 className="text-5xl font-serif leading-tight">
+                  {product.name}
+                </h1>
+                <p className="text-stone-500 text-lg leading-relaxed font-light italic">
+                  {product.shortDescription}
+                </p>
               </div>
 
-              <div className="mt-4 flex gap-3">
+              <div className="text-5xl font-light tracking-tighter">
+                {currencySymbol}
+                {product.price.toFixed(2)}
+              </div>
+
+              {/* ACTION BUTTONS */}
+              <div className="space-y-4">
+               <button
+  onClick={() => {
+    router.push(`/checkout?product=${product.slug}`);
+  }}
+  className="group relative w-full bg-[#121212] py-6 rounded-2xl overflow-hidden transition-all active:scale-[0.98]"
+>
+  <div className="absolute inset-0 bg-amber-600 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+  <span className="relative text-white text-xs font-black uppercase tracking-[0.3em]">
+    Buy Now
+  </span>
+</button>
+
+
                 <button
-                  type="button"
-                  className="inline-flex flex-1 items-center justify-center rounded-full bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700"
-                >
-                  Buy Now
-                </button>
-                <button
-                  type="button"
-                  onClick={handleAddToCart}
+                  onClick={() => addItem(product.id, 1, product.price)}
                   disabled={loading}
-                  className="inline-flex flex-1 items-center justify-center rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-950 disabled:opacity-60"
+                  className="group relative w-full border-2 border-[#121212] py-6 rounded-2xl overflow-hidden transition-all active:scale-[0.98]"
                 >
-                  {loading ? 'Adding…' : 'Add to cart'}
+                  <div className="absolute inset-0 bg-[#121212] translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <span className="relative text-[#121212] group-hover:text-white text-xs font-black uppercase tracking-[0.3em]">
+                    {loading ? 'Adding...' : 'Add to Collection'}
+                  </span>
                 </button>
               </div>
 
-              <div className="mt-3 space-y-2 text-xs text-slate-600">
-                <div className="flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-2 text-emerald-700">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                  <span>Free standard shipping</span>
-                </div>
-                <div className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2">
-                  <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-                  <span>Express shipping available</span>
-                </div>
+              {/* SPECIFICATIONS */}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: 'Material', value: product.material },
+                  { label: 'Finish', value: product.finish },
+                  {
+                    label: 'Diameter',
+                    value: product.diameterInches
+                      ? `${product.diameterInches}"`
+                      : null,
+                  },
+                  {
+                    label: 'Height',
+                    value: product.heightInches
+                      ? `${product.heightInches}"`
+                      : null,
+                  },
+                  {
+                    label: 'Weight',
+                    value: product.weightLbs
+                      ? `${product.weightLbs} lbs`
+                      : null,
+                  },
+                  {
+                    label: 'Stock',
+                    value: product.stock
+                      ? `${product.stock} items`
+                      : 'Available',
+                  },
+                ].map(
+                  (spec, idx) =>
+                    spec.value && (
+                      <div
+                        key={idx}
+                        className="bg-white p-5 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-stone-50 text-center"
+                      >
+                        <p className="text-[9px] uppercase tracking-widest font-black text-stone-400 mb-1">
+                          {spec.label}
+                        </p>
+                        <p className="text-sm font-semibold text-stone-800">
+                          {spec.value}
+                        </p>
+                      </div>
+                    ),
+                )}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1.1fr)]">
-          <div className="space-y-6">
-            <div className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-              <h2 className="text-sm font-semibold text-slate-900">Product Details</h2>
-              {product.description && (
-                <p className="mt-2 text-sm leading-relaxed text-slate-700">
-                  {product.description}
+        {/* DESCRIPTION + ITEMS */}
+        <div className="mt-24 grid lg:grid-cols-12 gap-16 border-t border-stone-100 pt-20">
+          <div className="lg:col-span-7 space-y-6">
+            <h2 className="text-xs font-black uppercase tracking-[0.4em] text-stone-400">
+              The Narrative
+            </h2>
+            <p className="text-xl leading-relaxed font-light text-stone-700 whitespace-pre-line">
+              {product.description}
+            </p>
+          </div>
+
+          <div className="lg:col-span-5 space-y-8">
+            <h2 className="text-xs font-black uppercase tracking-[0.4em] text-stone-400 text-center lg:text-left">
+              In the Sanctuary Box
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {itemizedList.length > 0 ? (
+                itemizedList.map((item, i) => (
+                  <div
+                    key={i}
+                    className="bg-stone-100/50 px-6 py-3 rounded-full border border-stone-200 text-xs font-bold text-stone-600 tracking-wide hover:bg-white hover:shadow-md transition-all cursor-default"
+                  >
+                    {item.trim()}
+                  </div>
+                ))
+              ) : (
+                <p className="text-stone-400 italic text-sm">
+                  Every essential piece included.
                 </p>
               )}
             </div>
-
-            <div className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-              <h2 className="text-sm font-semibold text-slate-900">Specifications</h2>
-              <dl className="mt-3 grid gap-x-6 gap-y-2 text-xs text-slate-600 md:grid-cols-2">
-                {product.material && (
-                  <>
-                    <dt className="font-medium">Material</dt>
-                    <dd>{product.material}</dd>
-                  </>
-                )}
-                {product.finish && (
-                  <>
-                    <dt className="font-medium">Finish</dt>
-                    <dd>{product.finish}</dd>
-                  </>
-                )}
-                {product.heightInches && (
-                  <>
-                    <dt className="font-medium">Height</dt>
-                    <dd>{product.heightInches}"</dd>
-                  </>
-                )}
-                {product.diameterInches && (
-                  <>
-                    <dt className="font-medium">Diameter</dt>
-                    <dd>{product.diameterInches}"</dd>
-                  </>
-                )}
-                {product.weightLbs && (
-                  <>
-                    <dt className="font-medium">Weight</dt>
-                    <dd>{product.weightLbs} lbs</dd>
-                  </>
-                )}
-              </dl>
-
-              {product.includedItems && (
-                <div className="mt-4">
-                  <h3 className="text-xs font-semibold text-slate-900">
-                    What&apos;s in the box
-                  </h3>
-                  <p className="mt-2 text-xs leading-relaxed text-slate-700">
-                    {product.includedItems}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <div className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
-              <h2 className="text-sm font-semibold text-slate-900">Delivery and Returns</h2>
-              <ul className="mt-3 space-y-2 text-xs text-slate-600">
-                <li>Shipping: Dispatch in 1–3 business days.</li>
-                <li>Returns: Eligible for return within 7 days of delivery.</li>
-                <li>Delivery: Free standard delivery on all orders.</li>
-              </ul>
-            </div>
-
-            <div className="grid gap-3 text-xs text-slate-700 md:grid-cols-3">
-              <div className="rounded-2xl bg-slate-900/95 p-3 text-white">
-                <p className="font-semibold text-[11px]">Secure</p>
-                <p className="mt-1 text-[11px]">Payments protected.</p>
-              </div>
-              <div className="rounded-2xl bg-slate-900/95 p-3 text-white">
-                <p className="font-semibold text-[11px]">Insured</p>
-                <p className="mt-1 text-[11px]">Fully insured delivery.</p>
-              </div>
-              <div className="rounded-2xl bg-slate-900/95 p-3 text-white">
-                <p className="font-semibold text-[11px]">Artisan</p>
-                <p className="mt-1 text-[11px]">Handmade in India.</p>
-              </div>
-            </div>
           </div>
         </div>
-
-        
-        {isOpen && (
-          <div
-            className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center"
-            onClick={() => {
-              setIsOpen(false);
-              setIsZoomed(false);
-            }}
-          >
-            <div
-              className="relative max-w-5xl w-full px-4"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                type="button"
-                className="absolute -top-10 right-2 text-sm text-white/80 hover:text-white z-50"
-                onClick={() => {
-                  setIsOpen(false);
-                  setIsZoomed(false);
-                }}
-              >
-                ✕ Close
-              </button>
-
-              <button
-                type="button"
-                onClick={goPrev}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-50
-                        flex h-12 w-12 items-center justify-center
-                        rounded-full bg-white/90 text-black shadow-lg hover:bg-white"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-
-              <button
-                type="button"
-                onClick={goNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-50
-                        flex h-12 w-12 items-center justify-center
-                        rounded-full bg-white/90 text-black shadow-lg hover:bg-white"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-
-              <div
-                className={`relative mx-auto h-[80vh] max-w-5xl overflow-hidden rounded-xl bg-black ${
-                  isZoomed ? 'cursor-zoom-out' : 'cursor-zoom-in'
-                }`}
-                onClick={() => setIsZoomed((z) => !z)}
-              >
-                <img
-                  src={activeImage}
-                  alt={product.name}
-                  className={`h-full w-full object-contain transition-transform duration-300 ${
-                    isZoomed ? 'scale-150' : 'scale-100'
-                  }`}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-      </section>
+      </div>
     </main>
   );
 }

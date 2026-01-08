@@ -53,7 +53,7 @@ export default function NewCategoryPage() {
             className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Idols & Statues"
+            
             required
           />
         </div>

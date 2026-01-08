@@ -1,8 +1,16 @@
 'use client';
+
 import { Suspense } from 'react';
-import OffersCarousel from './components/OffersCarousel';
+import dynamic from 'next/dynamic';
+
+import Navbar from './components/Navbar';
 import CategoryGrid from './components/CategoryGrid';
-import Navbar from './components/Navbar';  
+
+
+const OffersCarousel = dynamic(
+  () => import('./components/OffersCarousel'),
+  { ssr: false }
+);
 
 export default function HomePage() {
   return (
@@ -10,7 +18,9 @@ export default function HomePage() {
       <Suspense fallback={<div className="h-20 bg-white/70" />}>
         <Navbar />
       </Suspense>
+
       <OffersCarousel />
+
       <CategoryGrid />
     </main>
   );
