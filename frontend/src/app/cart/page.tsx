@@ -3,6 +3,9 @@
 import Image from 'next/image';
 import { useCartContext } from '../context/CartContext';
 
+
+
+
 export default function CartPage() {
   const { cart, totalQuantity, totalPrice, loading, reload } = useCartContext();
 
@@ -26,19 +29,33 @@ export default function CartPage() {
     );
   }
 
-  const handleIncrease = async (itemId: string) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${itemId}/increase`, {
-      method: 'PATCH',
-    });
-    await reload();
-  };
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
-  const handleDecrease = async (itemId: string) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart/items/${itemId}/decrease`, {
-      method: 'PATCH',
-    });
-    await reload();
-  };
+const handleIncrease = async (itemId: string) => {
+  const token = localStorage.getItem('token');
+
+  await fetch(`${API_URL}/cart/items/${itemId}/increase`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  await reload();
+};
+
+const handleDecrease = async (itemId: string) => {
+  const token = localStorage.getItem('token');
+
+  await fetch(`${API_URL}/cart/items/${itemId}/decrease`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  await reload();
+};
 
   return (
     <main className="min-h-screen bg-white selection:bg-orange-100 antialiased">
@@ -58,7 +75,7 @@ export default function CartPage() {
             {cart.items.map((item: any) => {
               const product = item.product;
               const thumbUrl = product?.thumbnail
-                ? `${process.env.NEXT_PUBLIC_API_URL}${product.thumbnail}`
+                ? `${API_URL}${product.thumbnail}`
                 : null;
 
               return (
@@ -119,10 +136,10 @@ export default function CartPage() {
 
                   <div className="flex flex-col justify-between py-2 text-right">
                     <p className="text-2xl font-black text-slate-950">
-                      ₹{(Number(item.unitPrice) * item.quantity).toLocaleString()}
+                      ${(Number(item.unitPrice) * item.quantity).toLocaleString()}
                     </p>
                     <p className="text-[11px] font-bold uppercase tracking-widest text-stone-400">
-                      ₹{Number(item.unitPrice).toLocaleString()} / Unit
+                      ${Number(item.unitPrice).toLocaleString()} / Unit
                     </p>
                   </div>
                 </article>

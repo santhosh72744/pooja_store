@@ -20,7 +20,7 @@ export default function AccountPage() {
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem('token');
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL
       const response = await fetch(`${apiUrl}/orders/my`, {
         headers: { Authorization: `Bearer ${token}` },
       });

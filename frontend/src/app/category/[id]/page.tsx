@@ -2,6 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Breadcrumb from '@/app/components/Breadcrumb';
 
+
+
 type Product = {
   id: string;
   name: string;

@@ -36,7 +36,7 @@ import { OrdersModule } from './orders/orders.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }),
 
     ProductsModule,
@@ -45,7 +45,7 @@ import { OrdersModule } from './orders/orders.module';
     CartModule,
     UsersModule,
     AuthModule,
-    
+
     PaymentsModule,
     OrdersModule,
    

@@ -1,9 +1,23 @@
-import { Controller, Post, Body, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import type { Request, Response } from 'express';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { StripeService } from './stripe.service';
+import { PaymentsService } from './payments.service';
 import { OrdersService } from '../orders/orders.service';
+import { AuthGuard } from '@nestjs/passport';
+
+interface OrderItemInput {
+  productId: string;
+  quantity: number;
+}
 
 @Controller('payments')
 export class PaymentsController {
@@ -11,67 +25,80 @@ export class PaymentsController {
 
   constructor(
     private readonly stripeService: StripeService,
-    private readonly configService: ConfigService,
+    private readonly paymentsService: PaymentsService,
     private readonly ordersService: OrdersService,
+    private readonly configService: ConfigService,
   ) {
     this.stripe = this.stripeService.stripe;
   }
 
-
+  
+  @UseGuards(AuthGuard('jwt'))
   @Post('create-intent')
   async createIntent(
-    @Body('amount') amount: number,
-    @Body('userId') userId: string,
-    @Body('items') items: any[],
+    @Req() req: any,
+    @Body('items') items: OrderItemInput[],
   ) {
-    const intent = await this.stripe.paymentIntents.create({
-      amount,
-      currency: 'usd',
-      automatic_payment_methods: { enabled: true },
+    const userId = req.user.id;
 
-     
-      metadata: {
+   
+    const intent =
+      await this.paymentsService.createPaymentIntent(
+        items,
         userId,
-        items: JSON.stringify(items),
-      },
-    });
+      );
 
-    return { clientSecret: intent.client_secret };
+    return {
+      clientSecret: intent.client_secret,
+    };
   }
 
- 
+  
   @Post('webhook')
-  async handleWebhook(@Req() req: Request, @Res() res: Response) {
-    const signature = req.headers['stripe-signature'] as string;
+  async handleWebhook(
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const signature = req.headers[
+      'stripe-signature'
+    ] as string;
 
     let event: Stripe.Event;
 
     try {
       event = this.stripe.webhooks.constructEvent(
-        req.body,
+        (req as any).rawBody,
         signature,
-        this.configService.get<string>('STRIPE_WEBHOOK_SECRET')!,
+        this.configService.get<string>(
+          'STRIPE_WEBHOOK_SECRET',
+        )!,
       );
     } catch (err) {
-      console.error('Webhook signature verification failed');
+      console.error(
+        '❌ Stripe webhook signature verification failed',
+      );
       return res.status(400).send('Webhook Error');
     }
 
     if (event.type === 'payment_intent.succeeded') {
-      const intent = event.data.object as Stripe.PaymentIntent;
+      const intent =
+        event.data.object as Stripe.PaymentIntent;
 
       const userId = intent.metadata.userId;
-      const amount = intent.amount_received;
-      const items = JSON.parse(intent.metadata.items || '[]');
+      const items: OrderItemInput[] = JSON.parse(
+        intent.metadata.items || '[]',
+      );
 
       await this.ordersService.createFromStripe(
         intent.id,
-        amount,
         userId,
         items,
       );
 
-      console.log('Order + items saved for user:', userId);
+      console.log(
+       
+        userId,
+      );
     }
 
     return res.json({ received: true });

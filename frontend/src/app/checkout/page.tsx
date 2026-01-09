@@ -16,6 +16,7 @@ type Product = {
   price: number;
   thumbnail?: string | null;
 };
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -69,7 +70,7 @@ export default function CheckoutPage() {
 
     async function loadProduct() {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/products/${encodedSlug}`,
+        `${API_URL}/products/${encodedSlug}`,
         { cache: 'no-store' }
       );
       if (!res.ok) return;
@@ -132,7 +133,7 @@ const breadcrumbItems = [
 
 
   const imageUrl = product.thumbnail
-    ? `${process.env.NEXT_PUBLIC_API_URL}${product.thumbnail}`
+    ? `${API_URL}${product.thumbnail}`
     : '/no-image.png';
 
   const total = product.price * qty;
@@ -141,37 +142,42 @@ const breadcrumbItems = [
     'w-full bg-stone-50 border border-stone-200 rounded-xl px-5 py-4 text-sm font-bold text-slate-800 focus:border-[#c2410c] focus:ring-0 outline-none transition-all placeholder:text-stone-400 placeholder:font-normal';
 
   const createPaymentIntent = async () => {
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-    setLoading(true);
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/payments/create-intent`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: Math.round(total * 100),
-          userId: user.id,
-          items: [
-            {
-              productId: product.id,
-              productName: product.name,
-              productImage: imageUrl,
-              quantity: qty,
-              price: product.price,
-            },
-          ],
-        }),
-      }
-    );
-    const data = await res.json();
-    setClientSecret(data.clientSecret);
-    setStep('payment');
+  if (!user) {
+    router.push('/login');
+    return;
+  }
+
+  setLoading(true);
+
+  const token = localStorage.getItem('token');
+
+  const res = await fetch(`${API_URL}/payments/create-intent`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      items: [
+        {
+          productId: product.id,
+          quantity: qty,
+        },
+      ],
+    }),
+  });
+
+  if (!res.ok) {
     setLoading(false);
-  };
-  
+    return;
+  }
+
+  const data = await res.json();
+  setClientSecret(data.clientSecret);
+  setStep('payment');
+  setLoading(false);
+};
+
 
 
 
@@ -217,7 +223,7 @@ const breadcrumbItems = [
                       <button onClick={() => setQty(q => q + 1)} className="w-8 h-8 flex items-center justify-center hover:text-[#c2410c] text-xl">+</button>
                     </div>
                   </div>
-                  <div className="text-3xl font-serif text-[#0f172a] font-bold">₹{total.toLocaleString('en-IN')}</div>
+                  <div className="text-3xl font-serif text-[#0f172a] font-bold">${total.toLocaleString('en-IN')}</div>
                 </div>
 
                 <button
@@ -276,7 +282,7 @@ const breadcrumbItems = [
               <div className="p-8 md:p-12 animate-in fade-in duration-500">
                 <div className="mb-8 pb-8 border-b border-stone-100 flex justify-between items-center">
                    <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Final Offering</p>
-                   <p className="text-2xl font-serif font-bold text-[#c2410c]">₹{total.toLocaleString('en-IN')}</p>
+                   <p className="text-2xl font-serif font-bold text-[#c2410c]">${total.toLocaleString('en-IN')}</p>
                 </div>
                 <Elements stripe={stripePromise} options={{ clientSecret }}>
                   <PaymentForm />
@@ -312,4 +318,4 @@ const breadcrumbItems = [
       </div>
     </main>
   );
-}
+} 

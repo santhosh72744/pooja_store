@@ -8,7 +8,7 @@ export default function SignupPage() {
   const router = useRouter();
   const { signup } = useAuth();
 
-  const [name, setName] = useState('');
+  const [name, setName] = useState(''); // kept for future use
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -17,7 +17,6 @@ export default function SignupPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Password validation rules
   const passwordErrors = () => {
     const errors: string[] = [];
     if (password.length < 8) errors.push('At least 8 characters');
@@ -44,7 +43,8 @@ export default function SignupPage() {
     try {
       setLoading(true);
       await signup({ name, email, password });
-      router.push('/'); 
+
+      router.push('/');
     } catch (err: any) {
       setError(err?.message || 'Signup failed');
     } finally {
@@ -66,17 +66,13 @@ export default function SignupPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
-        
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Full name"
-            required
             className="w-full rounded-xl border border-stone-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
           />
 
-        
           <input
             type="email"
             placeholder="Email address"
@@ -86,7 +82,6 @@ export default function SignupPage() {
             className="w-full rounded-xl border border-stone-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
           />
 
-      
           <div className="relative">
             <input
               type="password"
@@ -99,7 +94,6 @@ export default function SignupPage() {
               className="w-full rounded-xl border border-stone-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
             />
 
-           
             {passwordFocused && pwdErrors.length > 0 && (
               <div className="absolute left-0 right-0 mt-2 rounded-xl bg-stone-50 border border-stone-200 px-4 py-3 text-[11px] text-stone-600 shadow">
                 <p className="font-semibold mb-1">Password must include:</p>
@@ -112,7 +106,6 @@ export default function SignupPage() {
             )}
           </div>
 
-       
           <input
             type="password"
             placeholder="Confirm password"
@@ -122,7 +115,6 @@ export default function SignupPage() {
             className="w-full rounded-xl border border-stone-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
           />
 
-        
           <button
             type="submit"
             disabled={loading}
