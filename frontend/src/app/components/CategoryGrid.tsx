@@ -61,35 +61,35 @@ export default function CategoryGrid() {
                          shadow-[0_10px_20px_rgba(0,0,0,0.02),0_30px_60px_rgba(0,0,0,0.05)]
                          transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_40px_90px_rgba(0,0,0,0.1)]"
             >
-              {/* Refined Background Number */}
+           
               <span className="absolute top-12 text-8xl font-serif italic text-stone-50 group-hover:text-orange-50/50 transition-colors pointer-events-none">
                 0{idx + 1}
               </span>
 
               <div className="relative z-10 flex flex-col items-center w-full">
-                {/* 1. HEADING: Bold & Sharp (Slate-900) to match "Pure Devotion" text */}
+              
                 <h3 className="text-3xl font-serif font-bold text-slate-900 group-hover:text-orange-900 
                                transition-colors duration-300 mb-6 leading-tight">
                   {cat.name}
                 </h3>
                 
-                {/* 2. DESCRIPTION: Muted Slate-500 for secondary contrast */}
+                
                 <p className="text-[16px] text-slate-500 font-medium leading-relaxed max-w-[260px]">
                   {cat.description}
                 </p>
 
                 <div className="mt-12 flex flex-col items-center gap-4">
-                  {/* The Signature Accent Line */}
+                  
                   <div className="w-10 h-[2px] bg-orange-200 group-hover:w-20 group-hover:bg-orange-600 transition-all duration-500" />
                   
-                  {/* CTA: Matching the editorial uppercase style */}
+                 
                   <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400 group-hover:text-slate-900 transition-colors">
                     Explore Collection
                   </span>
                 </div>
               </div>
 
-              {/* Subtle Inner Glow on Hover */}
+              
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-orange-50/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             </Link>
           ))}

@@ -13,7 +13,7 @@ export class Order {
   id: string;
 
   @Column({ name: 'user_id' })
-  userId: string; // ✅ REQUIRED now
+  userId: string; 
 
   @Column()
   status: string;

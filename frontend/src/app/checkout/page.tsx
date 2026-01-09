@@ -197,7 +197,7 @@ const breadcrumbItems = [
  
 
 
-        {/* ================= CONTENT CARD ================= */}
+        
         <div className="relative">
           <div className="absolute inset-0 bg-stone-200 translate-x-2 translate-y-2 rounded-[2.5rem] -z-10" />
           

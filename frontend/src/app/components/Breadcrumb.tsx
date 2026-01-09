@@ -21,7 +21,7 @@ export default function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
       <div className="mx-auto max-w-6xl">
         <ol className="inline-flex items-center gap-1 bg-white/80 backdrop-blur-md border border-slate-200/60 p-1.5 rounded-2xl shadow-sm">
           
-          {/* Home Icon Only */}
+        
           <li>
             <Link 
               href="/" 
@@ -35,7 +35,7 @@ export default function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
           {items
             .filter((item) => item.label.toLowerCase() !== 'home')
             .map((item, index) => {
-              const isLast = index === items.length - 2; // adjusted for removed Home
+              const isLast = index === items.length - 2; 
 
               const label = item.label
                 .replace(/-/g, ' ')

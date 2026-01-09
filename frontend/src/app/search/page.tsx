@@ -34,7 +34,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     <main className="min-h-screen bg-[#FDFDFB] px-6 py-24">
       <div className="mx-auto max-w-[1400px]">
         
-        {/* HEADER SECTION */}
+       
         <div className="mb-12 border-b border-stone-100 pb-8">
           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-700 mb-2">Search Results</p>
           <h1 className="text-4xl font-serif text-slate-900 italic">
@@ -50,7 +50,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           )}
         </div>
 
-        {/* PRODUCT GRID */}
+       
         {products.length > 0 && (
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((p) => (
@@ -61,7 +61,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               >
                 <article className="flex h-full flex-col overflow-hidden rounded-[2.5rem] bg-white shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-stone-100 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
                   
-                  {/* IMAGE BLOCK */}
+                 
                   <div className="relative aspect-[4/5] w-full overflow-hidden bg-white p-6">
                     {p.thumbnail ? (
                       <img
@@ -75,7 +75,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                       </div>
                     )}
                     
-                    {/* STOCK BADGE */}
+                   
                     <div className="absolute top-6 left-6">
                        <span className={`text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full border ${
                          p.stock > 0 
@@ -87,7 +87,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     </div>
                   </div>
 
-                  {/* CONTENT BLOCK */}
+                 
                   <div className="flex flex-1 flex-col p-8 pt-2">
                     <h2 className="text-xl font-serif text-slate-900 group-hover:text-amber-700 transition-colors">
                       {p.name}

@@ -12,7 +12,7 @@ export default function Footer() {
 
   return (
     <footer className="relative bg-white border-t border-stone-200">
-      {/* 1. Newsletter Section: Ultra-Clear & Wide */}
+      
       <div className="border-b border-stone-100">
         <div className="mx-auto max-w-[1800px] px-8 py-24 flex flex-col lg:flex-row items-center justify-between gap-16 lg:px-20">
           <div className="max-w-2xl text-center lg:text-left">
@@ -41,7 +41,7 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-[1800px] px-8 pt-28 pb-12 lg:px-20">
         <div className="grid grid-cols-1 gap-24 md:grid-cols-12 lg:gap-32">
           
-          {/* Brand & Mission: Sharp Branding */}
+         
           <div className="md:col-span-6 lg:col-span-5 space-y-12">
             <div className="flex flex-col gap-6">
               <div className="h-16 w-16 bg-[#0f172a] flex items-center justify-center rounded-sm shadow-xl">
@@ -70,7 +70,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Contact: Increased Scale for Readability */}
+          
           <div className="md:col-span-6 lg:col-span-4 space-y-12">
             <h4 className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-950">Support & Contact</h4>
             <div className="space-y-12">
@@ -89,7 +89,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Our Promise: Clean Block Style */}
+         
           <div className="md:col-span-12 lg:col-span-3">
             <div className="bg-stone-50 p-12 border border-stone-100 shadow-sm">
               <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-950 mb-10">Sanctuary Standards</h4>
@@ -111,7 +111,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar: Fluid & Minimal */}
+        
         <div className="mt-32 pt-12 border-t border-stone-200 flex flex-col md:flex-row justify-between items-center gap-10">
           <div className="flex flex-col items-center md:items-start gap-4">
             <p className="text-[11px] text-stone-400 uppercase tracking-[0.4em] font-black">

@@ -44,7 +44,7 @@ export default function SignupPage() {
     try {
       setLoading(true);
       await signup({ name, email, password });
-      router.push('/'); // or /login if you prefer
+      router.push('/'); 
     } catch (err: any) {
       setError(err?.message || 'Signup failed');
     } finally {
@@ -67,7 +67,7 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
 
-          {/* NAME */}
+        
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -76,7 +76,7 @@ export default function SignupPage() {
             className="w-full rounded-xl border border-stone-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
           />
 
-          {/* EMAIL */}
+        
           <input
             type="email"
             placeholder="Email address"
@@ -86,7 +86,7 @@ export default function SignupPage() {
             className="w-full rounded-xl border border-stone-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
           />
 
-          {/* PASSWORD */}
+      
           <div className="relative">
             <input
               type="password"
@@ -99,7 +99,7 @@ export default function SignupPage() {
               className="w-full rounded-xl border border-stone-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
             />
 
-            {/* PASSWORD RULES (only when focused + invalid) */}
+           
             {passwordFocused && pwdErrors.length > 0 && (
               <div className="absolute left-0 right-0 mt-2 rounded-xl bg-stone-50 border border-stone-200 px-4 py-3 text-[11px] text-stone-600 shadow">
                 <p className="font-semibold mb-1">Password must include:</p>
@@ -112,7 +112,7 @@ export default function SignupPage() {
             )}
           </div>
 
-          {/* CONFIRM PASSWORD */}
+       
           <input
             type="password"
             placeholder="Confirm password"
@@ -122,7 +122,7 @@ export default function SignupPage() {
             className="w-full rounded-xl border border-stone-200 px-4 py-3 outline-none focus:ring-2 focus:ring-orange-400"
           />
 
-          {/* SUBMIT */}
+        
           <button
             type="submit"
             disabled={loading}

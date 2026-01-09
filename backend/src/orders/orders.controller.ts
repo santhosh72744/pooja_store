@@ -7,7 +7,7 @@ import { OrdersService } from './orders.service';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @UseGuards(AuthGuard('jwt')) // ✅ USE PASSPORT DIRECTLY
+  @UseGuards(AuthGuard('jwt')) 
   @Get('my')
   async getMyOrders(@Req() req: Request) {
     const user = req.user as { id: string };

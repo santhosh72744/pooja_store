@@ -20,7 +20,7 @@ export default function LoginPage() {
 
     try {
       await login(email, password);
-      router.push('/'); // redirect after login
+      router.push('/'); 
     } catch (err: any) {
       setError(err?.message || 'Invalid credentials');
     } finally {

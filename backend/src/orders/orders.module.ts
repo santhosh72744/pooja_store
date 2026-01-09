@@ -11,6 +11,6 @@ import { OrderItem } from './order-item.entity';
   ],
   controllers: [OrdersController],
   providers: [OrdersService],
-  exports: [OrdersService], // ✅ THIS IS CRITICAL
+  exports: [OrdersService], 
 })
 export class OrdersModule {}

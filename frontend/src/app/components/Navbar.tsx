@@ -55,15 +55,15 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-[100]">
-      {/* Top accent */}
+      
       <div className="h-[5px] w-full bg-gradient-to-r from-[#9a3412] via-[#c2410c] to-[#9a3412]" />
 
       <nav className="bg-white/95 backdrop-blur-2xl border-b border-stone-200 shadow-lg px-2 md:px-8 lg:px-16">
 
-        {/* ================= ROW 1 ================= */}
+        
         <div className="flex items-center justify-between h-16 md:h-28 gap-4">
 
-          {/* LOGO */}
+        
           <div
             onClick={() => router.push('/')}
             className="flex items-center gap-2 md:gap-5 cursor-pointer"
@@ -81,7 +81,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* DESKTOP SEARCH */}
+         
           <div className="hidden md:flex flex-1 max-w-2xl">
             <form onSubmit={handleSubmit} className="relative w-full">
               <input
@@ -100,15 +100,14 @@ export default function Navbar() {
             </form>
           </div>
 
-          {/* RIGHT SIDE */}
+          
           <div className="flex items-center gap-3 md:gap-10">
 
-            {/* DESKTOP LINKS */}
+            
 <div className="hidden lg:flex items-center gap-4">
   <DesktopNavLink label="Home" path="/" />
 
-  {/* AUTH BUTTON (DESKTOP) */}
-{/* AUTH BUTTON (NO HYDRATION ERROR) */}
+ 
 {mounted && (
   user ? (
     <div
@@ -130,7 +129,7 @@ export default function Navbar() {
 
 
 
-            {/* CART */}
+        
             <div
               onClick={() => router.push('/cart')}
               className="flex items-center gap-2 bg-slate-950 text-white px-3 md:px-8 py-2 md:py-5 rounded-lg md:rounded-2xl shadow-2xl cursor-pointer"
@@ -146,10 +145,10 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* ================= ROW 2 (MOBILE) ================= */}
+        
         <div className="md:hidden flex items-center gap-2 px-2 pb-3">
 
-          {/* DROPDOWN */}
+        
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="p-2 rounded-lg bg-stone-100 text-slate-900"
@@ -157,7 +156,7 @@ export default function Navbar() {
             {isMenuOpen ? '✕' : '☰'}
           </button>
 
-          {/* SEARCH */}
+          
           <form onSubmit={handleSubmit} className="relative flex-1">
             <input
               type="search"
@@ -175,14 +174,14 @@ export default function Navbar() {
           </form>
         </div>
 
-       {/* ================= MOBILE MENU ================= */}
+       
 <div
   className={`md:hidden overflow-hidden transition-all duration-300 ${
     isMenuOpen ? 'max-h-80 border-t border-stone-100' : 'max-h-0'
   }`}
 >
   <div className="flex flex-col">
-    {/* Home */}
+   
     <div
       onClick={() => {
         router.push('/');
@@ -195,7 +194,7 @@ export default function Navbar() {
 
     {user ? (
       <>
-        {/* Orders */}
+       
         <div
           onClick={() => {
             router.push('/orders');
@@ -206,7 +205,7 @@ export default function Navbar() {
           Orders
         </div>
 
-        {/* Account */}
+       
         <div
           onClick={() => {
             router.push('/account');
@@ -217,7 +216,7 @@ export default function Navbar() {
           Account
         </div>
 
-        {/* Logout */}
+       
         <div
           onClick={() => {
             logout();
@@ -230,7 +229,7 @@ export default function Navbar() {
       </>
     ) : (
       <>
-        {/* Login / Signup (SINGLE BUTTON) */}
+       
         <div
           onClick={() => {
             router.push('/login');

@@ -5,10 +5,10 @@ import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    bodyParser: false, // required for Stripe webhook
+    bodyParser: false, 
   });
 
-  // ✅ Stripe webhook MUST receive raw body
+  
   app.use(
     '/payments/webhook',
     bodyParser.raw({ type: 'application/json' }),
@@ -18,7 +18,7 @@ async function bootstrap() {
   app.use(bodyParser.json({ limit: '10mb' }));
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  // ✅ CORS
+  
   app.enableCors({
     origin: 'http://localhost:3000',
     credentials: true,

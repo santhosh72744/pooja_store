@@ -40,7 +40,7 @@ export default function AccountPage() {
     <main className="min-h-screen bg-[#F4F1EE] px-4 pt-32 pb-24 text-slate-900 selection:bg-orange-100">
       <div className="max-w-4xl mx-auto">
 
-        {/* ================= HEADER SECTION ================= */}
+       
         <header className="text-center mb-20 animate-in fade-in slide-in-from-top-4 duration-1000">
           <div className="inline-block px-4 py-1.5 bg-[#c2410c]/10 rounded-full mb-6">
             <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#c2410c]">
@@ -57,9 +57,9 @@ export default function AccountPage() {
           </div>
         </header>
 
-        {/* ================= PROFILE CARD ================= */}
+        
         <section className="relative mb-16 group">
-          {/* Decorative Shadow Layer */}
+          
           <div className="absolute inset-0 bg-stone-200 translate-x-3 translate-y-3 rounded-[2.5rem] -z-10" />
           
           <div className="bg-white rounded-[2.5rem] p-8 md:p-14 border border-stone-100 shadow-[0_15px_40px_rgba(0,0,0,0.03)] flex flex-col md:flex-row items-center justify-between gap-10">
@@ -88,7 +88,7 @@ export default function AccountPage() {
           </div>
         </section>
 
-        {/* ================= ORDERS SECTION ================= */}
+       
         <section className="space-y-10">
           <div className="flex items-center gap-6 px-4">
             <h2 className="text-3xl font-serif text-[#0f172a]">Ritual History</h2>
@@ -101,7 +101,7 @@ export default function AccountPage() {
                 key={order.id} 
                 className="bg-white rounded-[2rem] border border-stone-100 shadow-sm overflow-hidden hover:shadow-xl hover:scale-[1.01] transition-all duration-500"
               >
-                {/* Header with better contrast */}
+               
                 <div className="px-8 py-6 bg-stone-50/50 flex flex-wrap justify-between items-center border-b border-stone-100 gap-4">
                   <div className="flex gap-10">
                     <div>
@@ -125,7 +125,7 @@ export default function AccountPage() {
                   </div>
                 </div>
 
-                {/* Items with clear typography */}
+               
                 <div className="p-8">
                   {order.items?.map((item: any, i: number) => (
                     <div key={i} className="flex items-center gap-8 group/item py-4 first:pt-0 last:pb-0 border-b last:border-0 border-stone-50">

@@ -20,7 +20,7 @@ import { AuthController } from './auth.controller';
       }),
     }),
   ],
-  controllers: [AuthController], // ✅ REQUIRED
+  controllers: [AuthController], 
   providers: [AuthService, JwtStrategy],
   exports: [PassportModule, JwtModule],
 })

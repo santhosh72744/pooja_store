@@ -43,7 +43,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
       <section className="mx-auto max-w-[1800px] px-8 py-20 lg:px-16">
         
-        {/* Editorial Header */}
+       
         <div className="mb-24 text-center">
           <p className="text-[11px] font-black uppercase tracking-[0.5em] text-orange-700">
             Sacred Collection
@@ -66,10 +66,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             {products.map((p) => (
               <Link key={p.id} href={`/product/${p.slug}`} className="group">
                 
-                {/* PRODUCT BLOCK: Strong borders and Deep Shadows */}
+                
                 <article className="flex flex-col bg-white border border-stone-200 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-500 hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] hover:-translate-y-2 overflow-hidden rounded-sm">
                   
-                  {/* IMAGE: Uncropped object-contain */}
+                 
                   <div className="relative aspect-square w-full bg-[#F9F8F6] p-12 border-b border-stone-100">
                     {p.thumbnail ? (
                       <Image
@@ -90,14 +90,14 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     </div>
                   </div>
 
-                  {/* CONTENT Section */}
+                 
                   <div className="flex flex-col p-8 bg-white">
                     <div className="flex justify-between items-start gap-6">
                       <h2 className="text-2xl font-serif font-bold text-slate-950 leading-tight group-hover:text-orange-900 transition-colors">
                         {p.name}
                       </h2>
                       
-                      {/* ENHANCED AMOUNT: Increased size and contrast */}
+                     
                       <div className="flex flex-col items-end shrink-0">
                         <span className="text-[8px] font-black uppercase tracking-widest text-stone-400 mb-1.5">Amount</span>
                         <div className="bg-slate-950 px-5 py-2.5 rounded-sm shadow-md transition-colors group-hover:bg-orange-800">
@@ -112,7 +112,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                       {p.description}
                     </p>
 
-                    {/* BOTTOM NAV: Sharp clarity */}
+                    
                     <div className="mt-10 flex items-center justify-between border-t border-stone-100 pt-8">
                       <span className="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">
                         Authentic Ritual Gear

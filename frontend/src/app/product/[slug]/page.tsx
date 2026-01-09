@@ -108,13 +108,13 @@ export default function ProductPage(props: PageProps) {
   const handleBuyNow = () => {
   const token = localStorage.getItem('token');
 
-  // Not logged in → go to login
+ 
   if (!token) {
     router.push(`/login?redirect=/checkout?product=${product?.id}`);
     return;
   }
 
-  // Logged in → go to checkout with product
+  
   router.push(`/checkout?product=${product?.id}`);
 };
 
@@ -125,7 +125,7 @@ export default function ProductPage(props: PageProps) {
   <div className="mx-auto max-w-[1500px] px-8 pt-32 pb-24">
 
         <div className="grid lg:grid-cols-[1fr_450px] gap-16">
-          {/* LEFT: GALLERY AREA */}
+         
           <div className="space-y-8">
             <div
               className="relative aspect-square w-full bg-white rounded-3xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.04)] border border-stone-100 group cursor-zoom-in"
@@ -162,7 +162,7 @@ export default function ProductPage(props: PageProps) {
               )}
             </div>
 
-            {/* THUMBNAILS */}
+         
             <div className="flex gap-4">
               {bottomImages.map((url, i) => (
                 <button
@@ -183,7 +183,7 @@ export default function ProductPage(props: PageProps) {
             </div>
           </div>
 
-          {/* RIGHT: DETAILS AREA */}
+      
           <div className="flex flex-col">
             <div className="sticky top-32 space-y-10">
               <div className="space-y-4">
@@ -203,7 +203,7 @@ export default function ProductPage(props: PageProps) {
                 {product.price.toFixed(2)}
               </div>
 
-              {/* ACTION BUTTONS */}
+             
               <div className="space-y-4">
                <button
   onClick={() => {
@@ -230,7 +230,7 @@ export default function ProductPage(props: PageProps) {
                 </button>
               </div>
 
-              {/* SPECIFICATIONS */}
+             
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { label: 'Material', value: product.material },
@@ -280,7 +280,7 @@ export default function ProductPage(props: PageProps) {
           </div>
         </div>
 
-        {/* DESCRIPTION + ITEMS */}
+        
         <div className="mt-24 grid lg:grid-cols-12 gap-16 border-t border-stone-100 pt-20">
           <div className="lg:col-span-7 space-y-6">
             <h2 className="text-xs font-black uppercase tracking-[0.4em] text-stone-400">

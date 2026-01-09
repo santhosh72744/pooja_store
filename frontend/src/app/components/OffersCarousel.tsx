@@ -17,14 +17,14 @@ export default function GalleryHero() {
   return (
     <section className="relative w-full h-[80vh] md:h-[85vh] bg-[#F4F1EE] flex items-center justify-center overflow-hidden pt-20 md:pt-0">
       
-      {/* 1. Organic Background Elements */}
+     
       <div className="absolute top-[-5%] left-[-10%] w-[70vw] h-[70vw] md:w-[40vw] md:h-[40vw] bg-white/40 rounded-full blur-3xl" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[80vw] h-[80vw] md:w-[50vw] md:h-[50vw] bg-orange-100/30 rounded-full blur-[80px] md:blur-[120px]" />
       
-      {/* 2. Central Artistic Composition */}
+     
       <div className="relative z-10 w-full max-w-5xl px-6 flex flex-col items-center">
         
-        {/* Floating Badge - Responsive Positioning */}
+        
         <div className="absolute -top-16 md:-top-12 left-1/2 -translate-x-1/2 md:translate-x-0 md:left-12 rotate-[-6deg] md:rotate-[-12deg] z-20 w-max">
           <div className="bg-white px-4 py-1.5 md:px-6 md:py-2 shadow-xl border border-stone-100">
             <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] text-orange-800">
@@ -33,7 +33,7 @@ export default function GalleryHero() {
           </div>
         </div>
 
-        {/* The Main Title Section */}
+        
         <div className="text-center w-full">
           <p className="text-[10px] md:text-base font-serif italic text-stone-500 mb-2 tracking-[0.2em] md:tracking-widest uppercase">
             {slides[0].desc_top}
@@ -49,7 +49,7 @@ export default function GalleryHero() {
           </p>
         </div>
 
-        {/* The Offer - Floating Offset (Adjusted for Mobile) */}
+       
         <div className="relative md:absolute md:-bottom-8 md:right-12 z-20 mt-4 md:mt-0">
           <div className="flex flex-col items-center md:items-end">
             <span className="hidden md:block text-6xl md:text-8xl font-serif text-orange-900/10 absolute -top-10 right-0 pointer-events-none uppercase">
@@ -62,19 +62,19 @@ export default function GalleryHero() {
           </div>
         </div>
 
-        {/* 3. The Custom "Petal" Button */}
+       
         <button className="group relative mt-12 md:mt-16 active:scale-95 transition-transform">
           <div className="relative z-10 px-8 py-4 md:px-12 md:py-5 bg-stone-900 text-white text-[10px] md:text-[11px] font-bold uppercase tracking-[0.3em] md:tracking-[0.4em] 
                         rounded-tl-[1.5rem] rounded-br-[1.5rem] md:rounded-tl-[2rem] md:rounded-br-[2rem] transition-all duration-500 group-hover:rounded-none group-hover:bg-orange-800">
             Explore Collection
           </div>
-          {/* Shadow layer */}
+      
           <div className="absolute inset-0 bg-stone-200 translate-x-1.5 translate-y-1.5 rounded-tl-[1.5rem] rounded-br-[1.5rem] md:rounded-tl-[2rem] md:rounded-br-[2rem] -z-10" />
         </button>
 
       </div>
 
-      {/* 4. Minimalist Progress Indicator - Hidden on very small screens to avoid clutter */}
+   
       <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10 flex gap-6 md:gap-12 items-end opacity-50 md:opacity-100">
           <div className="flex flex-col gap-2">
             <span className="text-[8px] md:text-[10px] font-bold text-stone-400">01</span>

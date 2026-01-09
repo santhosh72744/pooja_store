@@ -9,9 +9,7 @@ import {
 } from 'react';
 import { useRouter } from 'next/navigation';
 
-/* =====================
-   TYPES
-===================== */
+
 export type User = {
   id: string;
   email: string;
@@ -32,26 +30,20 @@ type AuthContextType = {
   logout: () => void;
 };
 
-/* =====================
-   CONTEXT
-===================== */
+
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-/* =====================
-   PROVIDER
-===================== */
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  /* =====================
-     RESTORE SESSION
-  ====================== */
+
   useEffect(() => {
     try {
       const token = localStorage.getItem('token');
@@ -73,9 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  /* =====================
-     LOGIN
-  ====================== */
+
   const login = async (email: string, password: string) => {
     const res = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
@@ -97,9 +87,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push('/');
   };
 
-  /* =====================
-     SIGNUP
-  ====================== */
   const signup = async (payload: SignupPayload) => {
     const res = await fetch(`${API_URL}/auth/signup`, {
       method: 'POST',
@@ -122,9 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     router.push('/');
   };
 
-  /* =====================
-     LOGOUT
-  ====================== */
+
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -147,9 +132,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-/* =====================
-   HOOK
-===================== */
+
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) {

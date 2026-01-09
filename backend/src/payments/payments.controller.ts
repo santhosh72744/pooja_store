@@ -17,9 +17,7 @@ export class PaymentsController {
     this.stripe = this.stripeService.stripe;
   }
 
-  // =====================================================
-  // 1️⃣ FRONTEND → CREATE PAYMENT INTENT
-  // =====================================================
+
   @Post('create-intent')
   async createIntent(
     @Body('amount') amount: number,
@@ -31,7 +29,7 @@ export class PaymentsController {
       currency: 'usd',
       automatic_payment_methods: { enabled: true },
 
-      // 🔑 Persist user + items in Stripe metadata
+     
       metadata: {
         userId,
         items: JSON.stringify(items),
@@ -41,9 +39,7 @@ export class PaymentsController {
     return { clientSecret: intent.client_secret };
   }
 
-  // =====================================================
-  // 2️⃣ STRIPE WEBHOOK → SINGLE SOURCE OF TRUTH
-  // =====================================================
+ 
   @Post('webhook')
   async handleWebhook(@Req() req: Request, @Res() res: Response) {
     const signature = req.headers['stripe-signature'] as string;

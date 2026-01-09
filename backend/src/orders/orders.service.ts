@@ -10,7 +10,7 @@ export class OrdersService {
     private readonly ordersRepository: Repository<Order>,
   ) {}
 
-  // ✅ SAVE ORDER FROM STRIPE (already correct)
+  
   async createFromStripe(
     paymentIntentId: string,
     amount: number,
@@ -33,11 +33,11 @@ export class OrdersService {
     });
   }
 
-  // ✅ MUST LOAD ITEMS
+  
   async findByUser(userId: string) {
     return this.ordersRepository.find({
       where: { userId },
-      relations: ['items'], // ⭐ THIS IS THE KEY FIX
+      relations: ['items'], 
       order: { createdAt: 'DESC' },
     });
   }
