@@ -14,9 +14,11 @@ export class AuthService {
     const user = await this.usersService.create(name, email, password);
 
     const payload = {
-      sub: user.id,
-      email: user.email,
-    };
+  sub: user.id,
+  email: user.email,
+  isAdmin: user.isAdmin,
+};
+
 
     const { password: _, ...safeUser } = user;
 
@@ -38,9 +40,11 @@ export class AuthService {
     }
 
     const payload = {
-      sub: user.id,
-      email: user.email,
-    };
+  sub: user.id,
+  email: user.email,
+  isAdmin: user.isAdmin,
+};
+
 
     const { password: _, ...safeUser } = user;
 

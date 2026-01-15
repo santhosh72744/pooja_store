@@ -7,16 +7,25 @@ import { CartItem } from './entities/cart-item.entity';
 @Injectable()
 export class CartService {
   constructor(
-    @InjectRepository(Cart) private cartRepo: Repository<Cart>,
-    @InjectRepository(CartItem) private itemRepo: Repository<CartItem>,
+    @InjectRepository(Cart)
+    private readonly cartRepo: Repository<Cart>,
+
+    @InjectRepository(CartItem)
+    private readonly itemRepo: Repository<CartItem>,
   ) {}
+
+  /* =========================
+     CART TOKEN BASED (existing)
+     ========================= */
 
   async getOrCreateCart(cartToken: string): Promise<Cart> {
     let cart = await this.cartRepo.findOne({ where: { cartToken } });
+
     if (!cart) {
       cart = this.cartRepo.create({ cartToken });
       await this.cartRepo.save(cart);
     }
+
     return cart;
   }
 
@@ -44,17 +53,32 @@ export class CartService {
     }
 
     await this.itemRepo.save(item);
-    return this.getCartWithItems(cartToken);
+    return this.getCart(cartToken);
   }
 
- 
   async getCart(cartToken: string) {
     await this.getOrCreateCart(cartToken);
-    return this.getCartWithItems(cartToken);
+    return this.cartRepo.findOne({
+      where: { cartToken },
+      relations: ['items', 'items.product'],
+    });
   }
 
+  /* =========================
+     USER BASED (existing)
+     ========================= */
 
-  
+  async getCartByUser(userId: string) {
+    return this.cartRepo.findOne({
+      where: { userId },
+      relations: ['items', 'items.product'],
+    });
+  }
+
+  /* =========================
+     ITEM OPERATIONS (existing)
+     ========================= */
+
   async increaseItemQuantity(itemId: string, delta = 1) {
     const item = await this.itemRepo.findOne({ where: { id: itemId } });
     if (!item) return null;
@@ -65,7 +89,6 @@ export class CartService {
     return this.getCartWithItemsById(item.cartId);
   }
 
- 
   async decreaseItemQuantity(itemId: string, delta = 1) {
     const item = await this.itemRepo.findOne({ where: { id: itemId } });
     if (!item) return null;
@@ -82,7 +105,6 @@ export class CartService {
     return this.getCartWithItemsById(item.cartId);
   }
 
-  
   async removeItem(itemId: string) {
     const item = await this.itemRepo.findOne({ where: { id: itemId } });
     if (!item) return null;
@@ -92,14 +114,36 @@ export class CartService {
     return this.getCartWithItemsById(cartId);
   }
 
- 
+  /* =========================
+     CART CLEARING
+     ========================= */
 
-  private async getCartWithItems(cartToken: string) {
-    return this.cartRepo.findOne({
-      where: { cartToken },
-      relations: ['items', 'items.product'],
+  async clearCartByUser(userId: string) {
+    const cart = await this.cartRepo.findOne({
+      where: { userId },
+      relations: ['items'],
     });
+
+    if (!cart || !cart.items?.length) return;
+
+    await this.itemRepo.remove(cart.items);
   }
+
+  async clearCartByToken(cartToken: string) {
+    const cart = await this.cartRepo.findOne({
+      where: { cartToken },
+      relations: ['items'], // IMPORTANT
+    });
+
+    if (!cart) return;
+
+    // remove cart -> DB cascade deletes cart_items
+    await this.cartRepo.remove(cart);
+  }
+
+  /* =========================
+     HELPERS
+     ========================= */
 
   private async getCartWithItemsById(cartId: string) {
     return this.cartRepo.findOne({

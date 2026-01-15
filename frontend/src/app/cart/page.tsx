@@ -1,184 +1,168 @@
 'use client';
 
-import Image from 'next/image';
-import { useCartContext } from '../context/CartContext';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
+export default function CartCheckoutPage() {
+  const router = useRouter();
+  const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
+  const [loading, setLoading] = useState(false);
+  const [cartToken, setCartToken] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] =
+  useState<'STRIPE' | 'ZELLE'>('STRIPE');
 
-
-export default function CartPage() {
-  const { cart, totalQuantity, totalPrice, loading, reload } = useCartContext();
-
-  if (loading && !cart) {
-    return (
-      <main className="mx-auto max-w-4xl px-4 py-32 text-center bg-white">
-        <p className="text-xl font-bold uppercase tracking-widest text-slate-900 animate-pulse">
-          RECALLING YOUR SANCTUARY...
-        </p>
-      </main>
-    );
-  }
-
-  if (!cart || !cart.items || cart.items.length === 0) {
-    return (
-      <main className="mx-auto max-w-4xl px-4 py-32 text-center bg-white">
-        <p className="text-xl font-black uppercase tracking-[0.4em] text-stone-300">
-          Your collection is empty.
-        </p>
-      </main>
-    );
-  }
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
-
-const handleIncrease = async (itemId: string) => {
-  const token = localStorage.getItem('token');
-
-  await fetch(`${API_URL}/cart/items/${itemId}/increase`, {
-    method: 'PATCH',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  const [address, setAddress] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
+    country: 'India',
   });
 
-  await reload();
+ 
+  useEffect(() => {
+    const token = localStorage.getItem('cartToken');
+    if (!token) {
+      router.push('/cart');
+      return;
+    }
+    setCartToken(token);
+  }, [router]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setAddress({ ...address, [e.target.name]: e.target.value });
+  };
+ 
+  const handleSubmit = async () => {
+  const token = cartToken ?? localStorage.getItem('cartToken');
+  if (!token) {
+    alert('Cart not ready. Please try again.');
+    return;
+  }
+
+  const authToken = localStorage.getItem('token');
+  if (!authToken) {
+    router.push('/login');
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    
+    if (paymentMethod === 'STRIPE') {
+      const res = await fetch(`${API_URL}/orders/checkout`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cartToken: token,
+          address,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Checkout failed');
+
+      const order = await res.json();
+      router.push(`/cart/payment?orderId=${order.id}`);
+      return;
+    }
+
+    
+    await fetch(`${API_URL}/orders/zelle`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        cartToken: token,
+        shippingAddress: address,
+        // backend will resolve cart items + total from cartToken
+      }),
+    });
+
+    router.push('/order-success?method=zelle');
+
+  } catch {
+    alert('Unable to proceed');
+  } finally {
+    setLoading(false);
+  }
 };
 
-const handleDecrease = async (itemId: string) => {
-  const token = localStorage.getItem('token');
 
-  await fetch(`${API_URL}/cart/items/${itemId}/decrease`, {
-    method: 'PATCH',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  await reload();
-};
 
   return (
-    <main className="min-h-screen bg-white selection:bg-orange-100 antialiased">
-      <div className="mx-auto max-w-[1440px] px-8 py-16 lg:px-24">
-        <header className="mb-12 border-b-2 border-slate-950 pb-8">
-          <h1 className="text-4xl font-black uppercase tracking-tighter text-slate-950 md:text-6xl">
-            Shopping Collection
-          </h1>
-          <p className="mt-4 text-[12px] font-black uppercase tracking-[0.5em] text-orange-800">
-            {totalQuantity} Items Curated
-          </p>
-        </header>
+    <main className="min-h-screen bg-[#f7f4ef] flex items-center justify-center px-4">
+      <div className="w-full max-w-xl bg-white rounded-3xl p-10 border border-stone-200">
+        <h1 className="text-2xl font-serif mb-8">Shipping Details</h1>
 
-        <div className="grid gap-20 lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)]">
-          
-          <section className="space-y-10">
-            {cart.items.map((item: any) => {
-              const product = item.product;
-              const thumbUrl = product?.thumbnail
-                ? `${API_URL}${product.thumbnail}`
-                : null;
-
-              return (
-                <article
-                  key={item.id}
-                  className="flex flex-col sm:flex-row gap-8 border-b border-stone-100 pb-10 last:border-0"
-                >
-                  <div className="h-40 w-40 flex-shrink-0 overflow-hidden border border-stone-200 bg-white p-4 shadow-sm">
-                    {thumbUrl ? (
-                      <Image
-                        src={thumbUrl}
-                        alt={product?.name || 'Product image'}
-                        width={160}
-                        height={160}
-                        className="h-full w-full object-contain transition-transform duration-700 hover:scale-110"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-[10px] font-black uppercase tracking-widest text-stone-300">
-                        No Artifact
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-1 flex-col justify-between py-2">
-                    <div>
-                      <h2 className="text-xl font-bold uppercase tracking-tight text-slate-950">
-                        {product?.name || 'Product'}
-                      </h2>
-                      <p className="mt-1 text-[11px] font-black uppercase tracking-widest text-emerald-700">
-                        Available for Shipment
-                      </p>
-                    </div>
-
-                    <div className="mt-6 flex items-center gap-6">
-                      <div className="flex items-center border-2 border-slate-950 bg-white">
-                        <button
-                          type="button"
-                          onClick={() => handleDecrease(item.id)}
-                          className="flex h-10 w-10 items-center justify-center text-lg font-bold transition hover:bg-slate-100 active:bg-stone-200"
-                        >
-                          −
-                        </button>
-                        <span className="w-10 text-center text-sm font-black text-slate-950">
-                          {item.quantity}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleIncrease(item.id)}
-                          className="flex h-10 w-10 items-center justify-center text-lg font-bold transition hover:bg-slate-100 active:bg-stone-200"
-                        >
-                          +
-                        </button>
-                      </div>
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-stone-400">Quantity</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col justify-between py-2 text-right">
-                    <p className="text-2xl font-black text-slate-950">
-                      ${(Number(item.unitPrice) * item.quantity).toLocaleString()}
-                    </p>
-                    <p className="text-[11px] font-bold uppercase tracking-widest text-stone-400">
-                      ${Number(item.unitPrice).toLocaleString()} / Unit
-                    </p>
-                  </div>
-                </article>
-              );
-            })}
-          </section>
-
-          <aside className="sticky top-12 h-fit space-y-8 bg-stone-50 p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-stone-100">
-            <div>
-              <h3 className="text-[12px] font-black uppercase tracking-[0.5em] text-stone-400 mb-6">Order Summary</h3>
-              <div className="flex justify-between items-end border-b border-stone-200 pb-6 mb-6">
-                <span className="text-[13px] font-black uppercase tracking-widest text-slate-600">Subtotal</span>
-                <span className="text-2xl font-black text-slate-950">₹{totalPrice.toLocaleString()}</span>
-              </div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-stone-400 leading-relaxed">
-                Taxes, insurance, and artisanal shipping fees calculated at final checkout.
-              </p>
-            </div>
-
-            <button
-              type="button"
-              className="w-full bg-orange-800 py-6 text-[13px] font-black uppercase tracking-[0.4em] text-white shadow-xl transition hover:bg-orange-900 active:scale-[0.98]"
-            >
-              Proceed to Buy
-            </button>
-
-            <div className="space-y-4 pt-4">
-               <div className="flex items-center gap-3">
-                  <span className="text-xl">🛡️</span>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-600">Secure Checkout Guarantee</p>
-               </div>
-               <div className="flex items-center gap-3">
-                  <span className="text-xl">💎</span>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-600">Artisan Authenticity</p>
-               </div>
-            </div>
-          </aside>
+        <div className="grid grid-cols-2 gap-4">
+          <input name="firstName" placeholder="First name" onChange={handleChange} className="input" />
+          <input name="lastName" placeholder="Last name" onChange={handleChange} className="input" />
+          <input name="email" placeholder="Email address" onChange={handleChange} className="input col-span-2" />
+          <input name="phone" placeholder="Phone number" onChange={handleChange} className="input col-span-2" />
+          <input name="street" placeholder="Street address" onChange={handleChange} className="input col-span-2" />
+          <input name="city" placeholder="City" onChange={handleChange} className="input" />
+          <input name="state" placeholder="State / Province" onChange={handleChange} className="input" />
+          <input name="zip" placeholder="ZIP Code" onChange={handleChange} className="input" />
+          <select name="country" onChange={handleChange} className="input">
+            <option>USA</option>
+          </select>
         </div>
+
+        <div className="mt-8 space-y-4">
+  <p className="text-sm font-black uppercase tracking-widest text-stone-500">
+    Payment Method
+  </p>
+
+  <label className="flex items-center gap-3 cursor-pointer">
+    <input
+      type="radio"
+      name="paymentMethod"
+      checked={paymentMethod === 'STRIPE'}
+      onChange={() => setPaymentMethod('STRIPE')}
+    />
+    Pay with Card (Stripe)
+  </label>
+
+  <label className="flex items-center gap-3 cursor-pointer">
+    <input
+      type="radio"
+      name="paymentMethod"
+      checked={paymentMethod === 'ZELLE'}
+      onChange={() => setPaymentMethod('ZELLE')}
+    />
+    Pay with Zelle
+  </label>
+</div>
+
+
+        <button
+          onClick={handleSubmit}
+          disabled={loading || !cartToken}
+          className="mt-8 w-full bg-stone-900 text-white py-4 rounded-xl font-black uppercase tracking-widest"
+        >
+          {loading ? 'Processing…' : 'Continue to Payment'}
+        </button>
       </div>
+
+      <style jsx>{`
+        .input {
+          border: 1px solid #e5e5e5;
+          padding: 12px;
+          border-radius: 12px;
+          font-size: 14px;
+        }
+      `}</style>
     </main>
   );
 }

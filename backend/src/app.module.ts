@@ -24,9 +24,11 @@ import { OrdersModule } from './orders/orders.module';
 
 
     ServeStaticModule.forRoot({
-      rootPath: join(process.cwd(), 'public'),
-      serveRoot: '/',
-    }),
+  rootPath: join(__dirname, '..', 'public', 'uploads'),
+  serveRoot: '/uploads',
+}),
+
+
 
     TypeOrmModule.forRoot({
       type: 'postgres',

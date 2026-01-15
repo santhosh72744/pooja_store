@@ -1,16 +1,29 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
 import { CartItem } from './cart-item.entity';
 
-@Entity('carts')
+@Entity('carts') // ✅ IMPORTANT
 export class Cart {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
+  @Column()
   cartToken: string;
 
-  @OneToMany(() => CartItem, (item) => item.cart)
+  @Column({ nullable: true })
+  userId: string;
+
+  @OneToMany(() => CartItem, item => item.cart)
   items: CartItem[];
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;

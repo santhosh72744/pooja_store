@@ -5,17 +5,19 @@ import { PaymentsController } from './payments.controller';
 import { PaymentsService } from './payments.service';
 import { StripeService } from './stripe.service';
 
-import { Product } from '../products/product.entity';
+import { Order } from '../orders/order.entity';
 import { OrdersModule } from '../orders/orders.module';
+import { ProductsModule } from '../products/products.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Product]), 
-    OrdersModule,                        
+    TypeOrmModule.forFeature([Order]), // ✅ needed by PaymentsService
+    OrdersModule,                      // ✅ needed by controller + webhook
+    ProductsModule,                    // ✅ needed by Buy Now flow
   ],
   controllers: [PaymentsController],
   providers: [
-    PaymentsService,  
+    PaymentsService,
     StripeService,
   ],
 })

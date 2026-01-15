@@ -11,6 +11,8 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './product.entity';
+import { UseGuards } from '@nestjs/common';
+import { AdminAuthGuard } from '../auth/admin-auth.guard';
 
 @Controller('products')
 export class ProductsController {
@@ -46,8 +48,10 @@ async findOne(@Param('slug') slug: string) {
     return this.productsService.update(id, data);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(id);
-  }
+ @Delete(':id')
+// @UseGuards(AdminAuthGuard)  // TEMP: disabled
+remove(@Param('id') id: string) {
+  return this.productsService.remove(id);
+}
+
 }

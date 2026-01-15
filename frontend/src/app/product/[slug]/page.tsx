@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { useCart } from '../../hooks/useCart';
+import { useCartContext } from '@/app/context/CartContext';
 import Breadcrumb from '@/app/components/Breadcrumb';
 import { useRouter } from 'next/navigation';
 
@@ -42,7 +42,7 @@ export default function ProductPage(props: PageProps) {
   const [isHoveringMain, setIsHoveringMain] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: 50, y: 50 });
   const router = useRouter();
-  const { addItem, loading } = useCart();
+  const { addItem, loading } = useCartContext();
 
   useEffect(() => {
     async function load() {

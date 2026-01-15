@@ -13,30 +13,7 @@ export default function Footer() {
   return (
     <footer className="relative bg-white border-t border-stone-200">
       
-      <div className="border-b border-stone-100">
-        <div className="mx-auto max-w-[1800px] px-8 py-24 flex flex-col lg:flex-row items-center justify-between gap-16 lg:px-20">
-          <div className="max-w-2xl text-center lg:text-left">
-            <h4 className="text-5xl font-serif font-bold text-slate-950 leading-tight">
-              Join our <span className="italic font-medium text-stone-500">Sacred Circle</span>
-            </h4>
-            <p className="text-sm tracking-[0.2em] text-stone-400 mt-6 uppercase font-bold">
-              Ritual guides and festive updates for your sanctuary.
-            </p>
-          </div>
-          
-          <form className="flex w-full max-w-xl border-b-2 border-slate-900 pb-2 group" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              type="email" 
-              placeholder="Email address" 
-              className="w-full bg-transparent px-2 py-4 text-xl text-slate-950 focus:outline-none font-serif italic placeholder:text-stone-300"
-              required
-            />
-            <button className="px-8 py-4 text-[11px] font-black uppercase tracking-[0.4em] text-slate-950 hover:text-orange-700 transition-all">
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </div>
+      
 
       <div className="mx-auto w-full max-w-[1800px] px-8 pt-28 pb-12 lg:px-20">
         <div className="grid grid-cols-1 gap-24 md:grid-cols-12 lg:gap-32">

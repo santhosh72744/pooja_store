@@ -13,13 +13,23 @@ export class Order {
   id: string;
 
   @Column({ name: 'user_id' })
-  userId: string; 
+  userId: string;
+
+  
+  @Column({ name: 'cart_token', nullable: true })
+  cartToken?: string;
 
   @Column()
   status: string;
 
   @Column()
   paymentStatus: string;
+
+  @Column({
+    name: 'payment_method',
+    default: 'STRIPE',
+  })
+  paymentMethod: 'STRIPE' | 'ZELLE';
 
   @Column('decimal')
   totalAmount: number;
@@ -37,4 +47,6 @@ export class Order {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  
 }

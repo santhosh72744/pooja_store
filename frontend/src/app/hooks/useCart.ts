@@ -23,16 +23,32 @@ function getOrCreateCartToken() {
   if (typeof window === 'undefined') return '';
   let token = localStorage.getItem('cartToken');
   if (!token) {
-    token = crypto.randomUUID();
+    token =
+      Math.random().toString(36).substring(2) +
+      Date.now().toString(36);
     localStorage.setItem('cartToken', token);
   }
   return token;
 }
 
+
 export function useCart() {
   const [cartToken, setCartToken] = useState('');
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(false);
+  const clearCartLocal = () => {
+  setCart(null);
+};
+
+  const resetCartToken = () => {
+  const newToken =
+    Math.random().toString(36).substring(2) +
+    Date.now().toString(36);
+
+  localStorage.setItem('cartToken', newToken);
+  setCartToken(newToken);
+  setCart(null);
+};
 
   
   useEffect(() => {
@@ -105,5 +121,7 @@ export function useCart() {
     totalQuantity,
     totalPrice,
     reload: fetchCart, 
+    clearCartLocal,
+    resetCartToken, 
   };
 }

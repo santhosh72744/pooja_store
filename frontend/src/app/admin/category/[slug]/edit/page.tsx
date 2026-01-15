@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -56,7 +55,7 @@ export default function EditCategoryPage() {
       });
 
       if (!res.ok) throw new Error('Failed to update');
-      router.push(`/admin/category/${newSlug}`);
+      router.push(`/admin`); // Redirecting to admin dashboard is usually better for workflow
       router.refresh();
     } catch (e) {
       alert('Error saving changes');
@@ -88,71 +87,124 @@ export default function EditCategoryPage() {
 
   if (loading || !category) {
     return (
-      <main className="mx-auto max-w-xl px-4 py-8">
-        <p className="text-sm text-slate-500">Loading category...</p>
+      <main className="min-h-screen bg-[#FDFCFB] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-stone-200 border-t-amber-600 rounded-full animate-spin" />
       </main>
     );
   }
 
   return (
-    <main className="mx-auto max-w-xl px-4 py-8">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-slate-900">Edit category</h1>
-        <button
-          type="button"
-          onClick={handleDelete}
-          disabled={deleting}
-          className="rounded-full border border-red-200 px-4 py-2 text-xs font-semibold text-red-700 hover:bg-red-50 disabled:opacity-60"
+    <main className="min-h-screen bg-[#FDFCFB] px-4 py-12 text-slate-900 font-sans">
+      <div className="max-w-2xl mx-auto">
+        
+        {/* BREADCRUMB / NAVIGATION */}
+        <button 
+          onClick={() => router.push('/admin')}
+          className="group flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-stone-400 hover:text-amber-600 transition-colors mb-8"
         >
-          {deleting ? 'Deleting...' : 'Delete'}
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Back to Dashboard
         </button>
+
+        {/* HEADER */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 border-b border-stone-100 pb-8">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-600 mb-2">Category Management</p>
+            <h1 className="text-4xl font-serif text-[#0f172a]">Edit: {category.name}</h1>
+          </div>
+          
+          <button
+            type="button"
+            onClick={handleDelete}
+            disabled={deleting}
+            className="flex items-center gap-2 px-6 py-3 rounded-xl border border-red-100 text-red-500 text-[10px] font-black uppercase tracking-widest hover:bg-red-50 transition-colors disabled:opacity-50"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            {deleting ? 'Deleting...' : 'Delete Category'}
+          </button>
+        </div>
+
+        {/* FORM CARD */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-stone-200 translate-x-2 translate-y-2 rounded-[2.5rem] -z-10" />
+          
+          <form onSubmit={handleSubmit} className="bg-white rounded-[2.5rem] p-8 md:p-10 border border-stone-200 shadow-sm space-y-8">
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* NAME */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-1">
+                  Category Name
+                </label>
+                <input
+                  className="w-full bg-stone-50 border border-stone-100 rounded-2xl px-5 py-4 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 transition-all outline-none"
+                  value={name}
+                  placeholder="e.g. Incense Sticks"
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* SLUG */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-1">
+                  URL Slug
+                </label>
+                <input
+                  className="w-full bg-stone-50 border border-stone-100 rounded-2xl px-5 py-4 text-sm font-mono focus:bg-white focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 transition-all outline-none"
+                  value={newSlug}
+                  placeholder="incense-sticks"
+                  onChange={(e) => setNewSlug(e.target.value)}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* DESCRIPTION */}
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-stone-400 ml-1">
+                Description
+              </label>
+              <textarea
+                className="w-full bg-stone-50 border border-stone-100 rounded-2xl px-5 py-4 text-sm focus:bg-white focus:ring-2 focus:ring-amber-500/10 focus:border-amber-500 transition-all outline-none resize-none"
+                rows={4}
+                value={description}
+                placeholder="Describe this sacred collection..."
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </div>
+
+            {/* ACTION BUTTONS */}
+            <div className="pt-4 flex items-center justify-end gap-4">
+              <button
+                type="button"
+                onClick={() => router.push('/admin')}
+                className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-stone-400 hover:text-stone-600 transition-colors"
+              >
+                Cancel
+              </button>
+              
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex items-center gap-3 px-10 py-4 bg-[#0f172a] text-white font-black uppercase text-[10px] tracking-[0.2em] rounded-2xl hover:bg-amber-600 transition-all shadow-xl shadow-stone-200 disabled:opacity-50"
+              >
+                {saving ? (
+                  <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                )}
+                {saving ? 'Processing...' : 'Save Changes'}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* FOOTER */}
+        <p className="mt-12 text-center text-[10px] font-black text-stone-300 uppercase tracking-[0.4em]">
+          Admin Portal • Sanctuary Management
+        </p>
       </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700">
-            Name
-          </label>
-          <input
-            className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-700">
-            Slug
-          </label>
-          <input
-            className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
-            value={newSlug}
-            onChange={(e) => setNewSlug(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-700">
-            Description
-          </label>
-          <textarea
-            className="mt-1 w-full rounded-lg border px-3 py-2 text-sm"
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded-full bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 disabled:opacity-60"
-        >
-          {saving ? 'Saving...' : 'Save changes'}
-        </button>
-      </form>
     </main>
   );
 }

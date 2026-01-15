@@ -1,5 +1,13 @@
 'use client';
 
+if (typeof window !== 'undefined') {
+  if (!('randomUUID' in crypto)) {
+    (crypto as any).randomUUID = () =>
+      Math.random().toString(36).substring(2) +
+      Date.now().toString(36);
+  }
+}
+
 import './globals.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';

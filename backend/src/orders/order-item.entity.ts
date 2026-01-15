@@ -3,6 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Order } from './order.entity';
 
@@ -26,8 +27,12 @@ export class OrderItem {
   @Column('decimal')
   price: number;
 
+  @Column({ name: 'orderId' })   // ✅ REQUIRED
+  orderId: string;
+
   @ManyToOne(() => Order, (order) => order.items, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'orderId' }) // ✅ REQUIRED
   order: Order;
 }

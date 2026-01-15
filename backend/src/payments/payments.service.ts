@@ -1,70 +1,40 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { StripeService } from './stripe.service';
+import Stripe from 'stripe';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Product } from '../products/product.entity';
-
-interface OrderItemInput {
-  productId: string;
-  quantity: number;
-}
+import { Order } from 'src/orders/order.entity';
+import { StripeService } from './stripe.service';
 
 @Injectable()
 export class PaymentsService {
   constructor(
     private readonly stripeService: StripeService,
-    @InjectRepository(Product)
-    private readonly productsRepository: Repository<Product>,
+
+    @InjectRepository(Order)
+    private readonly ordersRepository: Repository<Order>,
   ) {}
 
-  async createPaymentIntent(
-    items: OrderItemInput[],
-    userId: string, 
-  ) {
-    if (!items || items.length === 0) {
-      throw new BadRequestException('Items required');
+  async createPaymentIntent(orderId: string, userId: string) {
+    const order = await this.ordersRepository.findOne({
+      where: { id: orderId, userId },
+    });
+
+    if (!order) {
+      throw new BadRequestException('ORDER_NOT_FOUND');
     }
 
-    let amount = 0;
-
-    for (const item of items) {
-      const product = await this.productsRepository.findOne({
-        where: { id: item.productId },
+    const intent =
+      await this.stripeService.stripe.paymentIntents.create({
+        amount: Math.round(order.totalAmount * 100),
+        currency: 'inr',
+        automatic_payment_methods: { enabled: true },
+        metadata: {
+          orderId: order.id,      // ✅ REQUIRED
+          userId: userId,         // ✅ REQUIRED
+          cart: 'true',           // ✅ IDENTIFIER
+        },
       });
 
-      if (!product) {
-        throw new BadRequestException(
-          `Invalid product: ${item.productId}`,
-        );
-      }
-
-      const price = Number(product.price);
-
-      if (!price || price <= 0) {
-        throw new BadRequestException(
-          `Invalid price: ${product.price}`,
-        );
-      }
-
-      amount += price * item.quantity * 100; 
-    }
-
-    if (amount < 50) {
-      throw new BadRequestException(
-        `Amount too small for Stripe: ${amount}`,
-      );
-    }
-
-  
-
-    return this.stripeService.stripe.paymentIntents.create({
-      amount,
-      currency: 'usd',
-      automatic_payment_methods: { enabled: true },
-      metadata: {
-        userId,
-        items: JSON.stringify(items),
-      },
-    });
+    return intent;
   }
 }

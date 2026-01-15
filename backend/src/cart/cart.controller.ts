@@ -6,12 +6,18 @@ import {
   Query,
   Patch,
   Param,
+  Delete,
+  Req,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 
 @Controller('cart')
 export class CartController {
   constructor(private cartService: CartService) {}
+
+  /* =========================
+     EXISTING (UNCHANGED)
+     ========================= */
 
   @Post('items')
   async addItem(
@@ -41,5 +47,24 @@ export class CartController {
   @Patch('items/:id/decrease')
   decrease(@Param('id') id: string) {
     return this.cartService.decreaseItemQuantity(id);
+  }
+
+  /* =========================
+     ✅ NEW (HTTP SAFE)
+     Clear cart after payment
+     ========================= */
+
+  @Delete('clear')
+  async clearCart(@Req() req: any, @Query('cartToken') cartToken?: string) {
+    const token =
+      cartToken ||
+      req.headers['x-cart-token'];
+
+    if (!token) {
+      return { cleared: false };
+    }
+
+    await this.cartService.clearCartByToken(token);
+    return { cleared: true };
   }
 }

@@ -1,6 +1,10 @@
 'use client';
 
-import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
+import {
+  useStripe,
+  useElements,
+  PaymentElement,
+} from '@stripe/react-stripe-js';
 import { useState } from 'react';
 
 export default function PaymentForm() {
@@ -18,17 +22,38 @@ export default function PaymentForm() {
     setLoading(true);
     setError(null);
 
-    const { error } = await stripe.confirmPayment({
+    const result = await stripe.confirmPayment({
       elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/order-success`,
-      },
+      redirect: 'if_required',
     });
 
-    if (error) {
-      setError(error.message || 'Payment failed');
+    if (result.error) {
+      setError(result.error.message || 'Payment failed');
       setLoading(false);
+      return;
     }
+
+    if (result.paymentIntent?.status === 'succeeded') {
+      const token = localStorage.getItem('token');
+
+      await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/payments/confirm`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            paymentIntentId: result.paymentIntent.id,
+          }),
+        },
+      );
+      localStorage.removeItem('cartToken');
+      window.location.href = '/order-success';
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -36,7 +61,9 @@ export default function PaymentForm() {
       <PaymentElement />
 
       {error && (
-        <p className="text-sm text-red-600 text-center">{error}</p>
+        <p className="text-sm text-red-600 text-center">
+          {error}
+        </p>
       )}
 
       <button

@@ -2,14 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { useCart } from '../hooks/useCart';
 import { useAuth } from '@/context/AuthContext';
+import { useCartContext } from '../context/CartContext';
+
 
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { totalQuantity } = useCart();
+  const { totalQuantity } = useCartContext();
+
   const { user, logout } = useAuth();
 
   const [search, setSearch] = useState('');
@@ -131,7 +133,8 @@ export default function Navbar() {
 
         
             <div
-              onClick={() => router.push('/cart')}
+              onClick={() => router.push('/cartpage')}
+
               className="flex items-center gap-2 bg-slate-950 text-white px-3 md:px-8 py-2 md:py-5 rounded-lg md:rounded-2xl shadow-2xl cursor-pointer"
             >
               <span className="inline text-[10px] md:text-sm font-black uppercase tracking-widest">
@@ -195,15 +198,7 @@ export default function Navbar() {
     {user ? (
       <>
        
-        <div
-          onClick={() => {
-            router.push('/orders');
-            setIsMenuOpen(false);
-          }}
-          className="px-6 py-3 font-bold"
-        >
-          Orders
-        </div>
+        
 
        
         <div
@@ -249,4 +244,4 @@ export default function Navbar() {
       </nav>
     </header>
   );
-}
+} 
